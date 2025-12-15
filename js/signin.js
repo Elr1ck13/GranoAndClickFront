@@ -136,6 +136,7 @@ function createObjectUser() {
   const newIdNum = Math.floor(Date.now() / 1000);
   const userId = `${newIdNum}`;
 
+<<<<<<< HEAD
   const userModel = {
     id: userId,
     nombre: userName.value,
@@ -148,6 +149,20 @@ function createObjectUser() {
     contraseña: userPassword.value,
   };
   saveUserInLocalStorage(userModel);
+=======
+    const userModel = {
+        "id": userId,
+        "nombre": userName.value,
+        "apellido": userLastName.value,
+        "correo": userEmail.value,
+        "fechaNacimiento": userBirthDate.value,
+        "direccion": userAddress.value,
+        "codigoPostal": userPostalCode.value,
+        "telefono": userPhone.value,
+        "password": userPassword.value,
+    };
+    saveUserInLocalStorage(userModel);
+>>>>>>> 09d9dffc674553f2b19ce40fd15d67d9dd5c4441
 }
 
 function saveUserInLocalStorage(user) {
