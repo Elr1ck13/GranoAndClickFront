@@ -70,8 +70,11 @@ function loadAdmins(){
   fetch("../data/usuarios.json")
     .then((res) => res.json())
     .then((data) => {
-        usuarios.push(data[0])
+        if (data.length > 0 && !usuarios.some(u => u.id === data[0].id)) {
+            usuarios.push(data[0])
+        }
         localStorage.setItem("usuarios", JSON.stringify(usuarios));
+        usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
     })
     .catch((error) => {
       console.log(error.message);
@@ -83,18 +86,15 @@ function usuarioAceptado() {
 btnSend.addEventListener("click", function (event) {
   event.preventDefault();
   if (validaPrevio()) {
-    if (existeCorreo()) {
-      if(compararPassword()){
+    if(compararPassword()){ // <--- Debería guardar en localStorage y luego redirigir
         buildNavBar(pageElementForNavbar);
-        usuarioAceptado();
+        usuarioAceptado(); // <--- Aquí está la redirección
         form.reset();
-      }
-    }
+    } 
   } else {
     alertMessages("Alguno de los campos no es válido");
   }
 });
-
 window.addEventListener("load",function (event) {
       if (usuarios.length === 0) loadAdmins();
 });
