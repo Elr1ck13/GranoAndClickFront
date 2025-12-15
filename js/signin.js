@@ -140,7 +140,7 @@ function createObjectUser() {
         "direccion": userAddress.value,
         "codigoPostal": userPostalCode.value,
         "telefono": userPhone.value,
-        "contraseña": userPassword.value,
+        "password": userPassword.value,
     };
     saveUserInLocalStorage(userModel);
 }
