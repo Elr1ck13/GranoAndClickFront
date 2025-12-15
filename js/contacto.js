@@ -3,9 +3,10 @@ let email = document.getElementById("correo");
 let phone = document.getElementById("telefono");
 let msg = document.getElementById("mensaje");
 let send = document.getElementById("enviar");
+let respuesta = document.getElementById("respuesta");
 
 let regs = {
-  name: /^(?!.*[<>;\'\"\\\/])[A-Za-záéíóúñ]{2,}(?:[\s][A-Za-záéíóúñ]{2,}){0,98}$/,
+  name: /^(?!.*[<>;\'\"\\\/])[A-Za-záéíóúñ]{3,}(?:[\s][A-Za-záéíóúñ]{2,}){0,98}$/,
   email:
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
   phone: /^(?!0\d{2}|1\d{2}|2[0-1]\d|220)(?!(\d)\1{9}$)(?!0123456789$)(?!1234567890$)(?!9876543210$)(?!0101010101$)(?!(\d\d)\2{4}$)\d{10}$/,
@@ -38,19 +39,27 @@ function validateAll() {
   return resultados;
 }
 
-function bordesRojos(campo) {
+function aplicarBordeRojoGlow(campo) {
   switch (campo) {
     case "nombre":
-      name.style.border = "0.12rem solid red";
+      name.classList.add("input-invalid-glow");
+      name.classList.remove("input-valid-glow");
+      name.style.border = "";
       break;
     case "correo":
-      email.style.border = "0.12rem solid red";
+      email.classList.add("input-invalid-glow");
+      email.classList.remove("input-valid-glow");
+      email.style.border = "";
       break;
     case "teléfono":
-      phone.style.border = "0.12rem solid red";
+      phone.classList.add("input-invalid-glow");
+      phone.classList.remove("input-valid-glow");
+      phone.style.border = "";
       break;
     case "mensaje":
-      msg.style.border = "0.12rem solid red";
+      msg.classList.add("input-invalid-glow");
+      msg.classList.remove("input-valid-glow");
+      msg.style.border = "";
       break;
   }
 }
@@ -58,21 +67,21 @@ function bordesRojos(campo) {
 function mostrarErrores(arr) {
   const camposInvalidos = arr.slice(1);
   camposInvalidos.forEach((campo) => {
-    bordesRojos(campo);
+    aplicarBordeRojoGlow(campo);
   });
   const listaCampos = camposInvalidos.map(campo => {
     const campoMayuscula = campo.charAt(0).toUpperCase() + campo.slice(1);
     return `<li>${campoMayuscula}</li>`;
   }).join("");
   const mensajeHTML = `
-        <div class="custom-alert">
-            <p class="custom-alert-title">¡Error de Validación!</p>
-            <p><strong>Lo sentimos, los siguientes campos no son válidos:</strong></p>
-            <ul class="custom-alert-list">
-                ${listaCampos}
-            </ul>
-        </div>
-    `;
+  <div class="custom-alert alert-error-glow">
+  <p class="custom-alert-title">¡Error de Validación!</p>
+  <p><strong>Lo sentimos, los siguientes campos no son válidos:</strong></p>
+  <ul class="custom-alert-list">
+  ${listaCampos}
+  </ul>
+  </div>
+  `;
   respuesta.insertAdjacentHTML("beforeend", mensajeHTML);
 }
 const camposConReglas = [
@@ -84,10 +93,14 @@ const camposConReglas = [
 
 function marcarBorde(input, reg) {
   const valor = input.value.trim();
+  input.style.border = "";
+
   if (valor === "" || !reg.test(valor)) {
-    input.style.border = "0.12rem solid red";
+    input.classList.add("input-invalid-glow");
+    input.classList.remove("input-valid-glow");
   } else {
-    input.style.border = "0.12rem solid #ced4da";
+    input.classList.remove("input-invalid-glow");
+    input.classList.add("input-valid-glow");
   }
 }
 
@@ -104,15 +117,20 @@ function enviarCorreo() {
     .then(function (response) {
       respuesta.insertAdjacentHTML(
         "beforeend",
-        `<strong>¡Gracias!<br>  
-      Hemos recibido tu mensaje y te responderemos a la brevedad.</strong>`);
+        `<div class="custom-alert alert-success-glow">
+        <p class="custom-alert-title">¡Mensaje Enviado!</p>
+        <p><strong>¡Gracias!</strong><br>
+        Hemos recibido tu mensaje y te responderemos a la brevedad.</p>
+        </div>`);
     }, function (error) {
       respuesta.insertAdjacentHTML(
         "beforeend",
-        `<strong>¡Gracias!<br>  
-      Hubo un problema al comunicarse contigo, inténtalo más tarde </strong>`);
+        `<div class="custom-alert alert-error-glow">
+        <p class="custom-alert-title">¡Error de Servicio!</p>
+        <p><strong>Lo sentimos, hubo un problema.</strong><br>
+      Inténtalo más tarde o contáctanos directamente.</p>
+      </div>`);
     });
-
 }
 
 camposConReglas.forEach(({ input, reg }) => {
@@ -124,7 +142,6 @@ camposConReglas.forEach(({ input, reg }) => {
 send.addEventListener("click", function (event) {
   event.preventDefault();
   const form = document.getElementById("contactForm");
-  const respuesta = document.getElementById("respuesta");
   let resultados = validateAll();
 
   respuesta.innerHTML = '';
@@ -133,7 +150,8 @@ send.addEventListener("click", function (event) {
     form.reset();
     console.log("exito");
     camposConReglas.forEach(({ input }) => {
-      input.style.border = "0.12rem solid #ced4da";
+      input.classList.remove("input-invalid-glow", "input-valid-glow");
+      input.style.border = "";
     });
   } else {
     mostrarErrores(resultados, respuesta);
