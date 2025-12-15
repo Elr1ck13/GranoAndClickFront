@@ -11,6 +11,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/signin.css" />
+  
+  <link rel="icon" href="../assets/IconoLogo.png" />
 </head>
 
 <body>
@@ -20,7 +22,7 @@
       <header id="encabezado"></header>
     </div>
   </div>
- 
+
   <div class="container mt-4 text-center">
     <h1>Registrar nuevo usuario</h1>
   </div>
@@ -49,8 +51,8 @@
         </div>
         <div class="row mb-3">
           <div class="col-12 col-md-6 column-signin">
-            <label for="" style="font-size: 1.5rem" class="frmlbl">Telefono:</label>
-            <input type="text" placeholder="Telefono" class="frminp" id="userPhone" required />
+            <label for="" style="font-size: 1.5rem" class="frmlbl">Teléfono:</label>
+            <input type="text" placeholder="Teléfono" class="frminp" id="userPhone" required />
           </div>
           <div class="col-12 col-md-6">
             <label for="" style="font-size: 1.5rem" class="frmlbl">Fecha de Nacimiento:</label>
@@ -58,19 +60,9 @@
           </div>
         </div>
         <div class="row mb-3">
-          <div class="col-12 col-md-6">
-            <label for="" style="font-size: 1.5rem" class="frmlbl">Domicilio:</label>
-            <input type="text" placeholder="Domicilio" class="frminp" id="userAddress" required />
-          </div>
-          <div class="col-12 col-md-6 column-signin">
-            <label for="" style="font-size: 1.5rem" class="frmlbl">Fecha de Nacimiento:</label>
-            <input type="date" class="frminp" required />
-          </div>
-        </div>
-        <div class="row mb-3">
           <div class="col-12 col-md-6 column-signin">
             <label for="" style="font-size: 1.5rem" class="frmlbl">Domicilio:</label>
-            <input type="text" placeholder="Calle Número Colonia Municipio" class="frminp" required />
+            <input type="text" placeholder="Calle Número, Colonia, Municipio" class="frminp" id="userAddress" required />
           </div>
           <div class="col-12 col-md-6 column-signin">
             <label for="" style="font-size: 1.5rem" class="frmlbl">Código Postal:</label>
@@ -120,8 +112,6 @@
   </div>
 </main>
 
-    <div id="footer-container"></div>
-    
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
     crossorigin="anonymous"></script>

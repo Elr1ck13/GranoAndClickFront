@@ -24,12 +24,12 @@
       <h1>Iniciar Sesión</h1>
     </div>
     <div class="container form-login mt-3">
-      <form action="">
-        <label for="" style="font-size: 1.5rem" class="frmlbl">Correo:</label>
-        <input type="email" placeholder="Correo" class="frminp" />
-        <label for="" style="font-size: 1.5rem" class="frmlbl">Contraseña:</label>
-        <input type="password" placeholder="Contraseña" class="frminp" />
-        <button class="Btn-login">
+      <form action="" id ="loginForm">
+        <label for="emails" style="font-size: 1.5rem" class="frmlbl" >Correo:</label>
+        <input type="email" placeholder="Correo" class="frminp"id ="emails" />
+        <label for="pass" style="font-size: 1.5rem" class="frmlbl" >Contraseña:</label>
+        <input type="password" placeholder="Contraseña" class="frminp" id="pass" />
+        <button class="Btn-login" id="send">
           Iniciar Sesión
           <svg class="svgIcon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-door-open"
             viewBox="0 0 16 16">
@@ -51,6 +51,7 @@
     crossorigin="anonymous"></script>
   <script src="../js/main.js"></script>
   <script src="../js/navBarAndFooter.js"></script>
+  <script src="../js/login.js"></script>
 </body>
 
 </html>
