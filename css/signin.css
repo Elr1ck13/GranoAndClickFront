@@ -5,7 +5,7 @@ html {
   --fifthColor: #54ACBF;
   --color-light: #A7EBF2;
   --textColor: #FFFFFF;
-  --hgColor: #FDF5AA; /* Color de los botones */
+  --hgColor: #FDF5AA;
   --mainFamilyFont: "Outfit", sans-serif;
 }
 
@@ -203,6 +203,7 @@ input[type="date"].frminp::-webkit-calendar-picker-indicator {
     width: 100%;
   }
 }
+}
 
 @media (max-width: 768px) {
   .form-signin {
@@ -288,6 +289,6 @@ input[type="date"].frminp::-webkit-calendar-picker-indicator {
   top: 0;
 }
 
-#alert-messages strong {
-  color: var(--hgColor);
+#alert-messages .alert p strong {
+    color: var(--hgColor);
 }

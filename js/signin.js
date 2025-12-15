@@ -147,18 +147,18 @@ function createObjectUser() {
   const newIdNum = Math.floor(Date.now() / 1000);
   const userId = `${newIdNum}`;
 
-    const userModel = {
-        "id": userId,
-        "nombre": userName.value,
-        "apellido": userLastName.value,
-        "correo": userEmail.value,
-        "fechaNacimiento": userBirthDate.value,
-        "direccion": userAddress.value,
-        "codigoPostal": userPostalCode.value,
-        "telefono": userPhone.value,
-        "contraseña": userPassword.value,
-    };
-    saveUserInLocalStorage(userModel);
+  const userModel = {
+    "id": userId,
+    "nombre": userName.value,
+    "apellido": userLastName.value,
+    "correo": userEmail.value,
+    "fechaNacimiento": userBirthDate.value,
+    "direccion": userAddress.value,
+    "codigoPostal": userPostalCode.value,
+    "telefono": userPhone.value,
+    "contraseña": userPassword.value,
+  };
+  saveUserInLocalStorage(userModel);
 }
 
 function saveUserInLocalStorage(user) {
@@ -172,29 +172,29 @@ function addUser() {
     .then((res) => res.json())
     .then((data) => {
       users = data;
-      cleanAlert();
+      cleanErrors();
+
       if (validateInfo()) {
         if (!userExist(userEmail.value, users)) {
-          cleanErrors();
           createObjectUser();
 
-
           alertMessages.insertAdjacentHTML(
-          "beforeend",
-          `<div class="alert alert-success alert-success-glow">
-          <p class="custom-alert-title">¡Registro Exitoso!</p> <strong>Usuario agregado correctamente.</strong>
-          </div>`);
-          form.reset();
+            "beforeend",
+            `<div class="alert alert-success alert-success-glow">
+            <p class="custom-alert-title">¡Registro Exitoso!</p> 
+            <p><strong>Usuario agregado correctamente.</strong></p>
+            </div>`);
+            form.reset();
         } else {
 
           applyGlowClass(userEmail, false);
           applyGlowClass(userConfirmEmail, false);
 
           alertMessages.insertAdjacentHTML(
-          "beforeend",
-          `<div class="alert alert-danger alert-error-glow">
+            "beforeend",
+            `<div class="alert alert-danger alert-error-glow">
           <p class="custom-alert-title">Error: Usuario Existente</p>
-          <strong>El correo: ${userEmail.value} ya está registrado.</strong>
+          <p><strong>El correo: ${userEmail.value} ya está registrado.</strong></p>
           </div>`
           );
         }
@@ -221,10 +221,10 @@ function addUser() {
 
       cleanAlert();
       alertMessages.insertAdjacentHTML(
-      "beforeend",
-      `<div class="alert alert-danger alert-error-glow">
+        "beforeend",
+        `<div class="alert alert-danger alert-error-glow">
       <p class="custom-alert-title">Error de Conexión</p> 
-      <strong>Error al cargar datos: ${error.message}</strong>
+      <p><strong>Error al cargar datos: ${error.message}</strong></p>
       </div>`);
     });
 }
@@ -277,7 +277,6 @@ btnSignin.addEventListener("click", handleAddUserFlow);
 
 function handleAddUserFlow(event) {
   event.preventDefault();
-  cleanErrors();
   addUser();
 }
 
