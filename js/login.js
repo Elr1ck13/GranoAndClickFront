@@ -2,6 +2,8 @@ const form = document.getElementById("loginForm");
 const localCorreo = document.getElementById("emails");
 const localPass = document.getElementById("pass");
 const btnSend = document.getElementById("send");
+let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+const pageElementForNavbar = document.querySelector("div");
 
 const regs = {
   email:
@@ -15,17 +17,27 @@ function alertMessages(msg) {
 }
 
 function compararPassword() {
-  const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
   if (usuarios.length === 0) return false;
+  
   for (const usuario of usuarios) {
-    if (usuario.password === localPass.value && usuario.correo === localCorreo.value) {
-      alertMessages("Bienvenido " + usuario.nombre);
+    
+    if (usuario.password=== localPass.value && usuario.correo === localCorreo.value) {
+      let rolAsignado = 'client';
+      if (usuario.id.startsWith('AD')) {
+                rolAsignado = 'admin';
+            }
+            localStorage.setItem('userToken', usuario.correo); 
+            localStorage.setItem('userId', usuario.id);
+            localStorage.setItem('userRole', rolAsignado);
+      alertMessages("Bienvenido "+ usuario.nombre);
       return true
-    } else {
-      alertMessages("Alguno de los campos no es correcto");
-      return false;
-    }
+    } 
   }
+  alertMessages("Alguno de los campos no es correcto");
+  localStorage.removeItem('userToken');
+    localStorage.removeItem('userRole');
+    return false;
+
 }
 
 function validateField(element, regex, errorField) {
@@ -36,8 +48,6 @@ function validateField(element, regex, errorField) {
 }
 
 function existeCorreo() {
-  const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
-
   for (const usuario of usuarios) {
     if (usuario.correo === localCorreo.value) {
       return true;
@@ -55,17 +65,36 @@ function validaPrevio() {
 
   return veredict;
 }
-
+function loadAdmins(){
+    
+  fetch("../data/usuarios.json")
+    .then((res) => res.json())
+    .then((data) => {
+        usuarios.push(data[0])
+        localStorage.setItem("usuarios", JSON.stringify(usuarios));
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
+}
+function usuarioAceptado() {
+      window.location.href = "../html/productos.html";
+}
 btnSend.addEventListener("click", function (event) {
   event.preventDefault();
   if (validaPrevio()) {
     if (existeCorreo()) {
-      if (compararPassword()) {
-        buildNavBar(page);
-          window.location.href = "../html/productos.html";
+      if(compararPassword()){
+        buildNavBar(pageElementForNavbar);
+        usuarioAceptado();
+        form.reset();
       }
     }
   } else {
     alertMessages("Alguno de los campos no es válido");
   }
+});
+
+window.addEventListener("load",function (event) {
+      if (usuarios.length === 0) loadAdmins();
 });

@@ -138,26 +138,28 @@ function buildNavBar(page) {
   let signPage = getPagePaths(page, "signin.html");
   let formularioCreacion = getPagePaths(page, "formularioCreacion.html");
 
+
   function actualizarNavbar() {
     const userToken = localStorage.getItem('userToken');
-        const id = localStorage.getItem('id');
-      const userIsAuthenticated = userToken !== null;
-    let navBarAuthenticated = ``;
+    const userId = localStorage.getItem('userId');
+    const userIsAuthenticated = userToken !== null;
+    let navBar;
 
-    if (userIsAuthenticated){
-    navBarAuthenticated=''
-  ;
-  if (id.startsWith('AD')) {
-    navBarAuthenticated += `<li class="nav-item admin-link">
-                                    <a class="nav-link text-danger fw-bold" href="${formularioCreacion}">Creación Producto</a>
-                                </li>`
-  }
-  navBarAuthenticated += ``
+    if (userIsAuthenticated) {
+      let adminLink = '';
+      if (userId && userId.startsWith('AD')) {
+        adminLink = `Aqui va la estructura de la pagina de creacion de productos`;
+      }
 
-
-  navBar = navBarAuthenticated;
-}else{
-  navBar = `
+      navBar = `aqui va la navbar completa para cliente
+      <div class="collapse navbar-collapse" id="mainNavbarContent">
+    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+        ${adminLink}  /// <--- Esta es el fragmento que tendrias que agregar a tu codigo que hara que aparezca o no la opcion de pagina de creacion de Producto, ya declare la variable pero la puedes cambiar.
+    </ul>
+      
+      `;
+    } else {
+      navBar = `
   <nav class="navbar navbar-dark navbar-expand-lg mt-2">
           <div class="container" id="navBar">
             <a class="navbar-brand" href="${indexPage}">
@@ -205,19 +207,22 @@ function buildNavBar(page) {
           </div>
         </nav>
 `;
+    }
+    return navBar
   }
-  return navBar
-}
-const finalNavBarHTML = actualizarNavbar();
-    putHTML("encabezado", finalNavBarHTML, "Error ");
+  const finalNavBarHTML = actualizarNavbar();
+  putHTML("encabezado", finalNavBarHTML, "Error ");
 }
 
-function logOut(){
+function logOut() {
   localStorage.removeItem('userToken');
+  localStorage.removeItem('userId');
+
   let page = document.querySelector("div");
   buildNavBar(page);
   window.location.href = 'index.html';
 }
+
 window.addEventListener("load", function () {
   let page = document.querySelector("div");
   buildFooter(page);
