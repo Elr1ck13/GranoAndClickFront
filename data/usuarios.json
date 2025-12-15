@@ -1,6 +1,6 @@
 [
     {
-        "id": "1",
+        "id": "AD_001",
         "nombre": "Job",
         "apellido": "Ibarra",
         "correo": "job@correo.com",
@@ -8,6 +8,6 @@
         "direccion": "calle 07",
         "codigoPostal": "44004",
         "telefono": "3320382976",
-        "contraseña": "jobadr13=2"
+        "password": "jobadr13=2"
     }
 ]

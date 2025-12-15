@@ -136,8 +136,28 @@ function buildNavBar(page) {
   let productPage = getPagePaths(page, "productos.html")
   let logPage = getPagePaths(page, "login.html");
   let signPage = getPagePaths(page, "signin.html");
+  let formularioCreacion = getPagePaths(page, "formularioCreacion.html");
 
-  const navBar = `
+  function actualizarNavbar() {
+    const userToken = localStorage.getItem('userToken');
+        const id = localStorage.getItem('id');
+      const userIsAuthenticated = userToken !== null;
+    let navBarAuthenticated = ``;
+
+    if (userIsAuthenticated){
+    navBarAuthenticated=''
+  ;
+  if (id.startsWith('AD')) {
+    navBarAuthenticated += `<li class="nav-item admin-link">
+                                    <a class="nav-link text-danger fw-bold" href="${formularioCreacion}">Creación Producto</a>
+                                </li>`
+  }
+  navBarAuthenticated += ``
+
+
+  navBar = navBarAuthenticated;
+}else{
+  navBar = `
   <nav class="navbar navbar-dark navbar-expand-lg mt-2">
           <div class="container" id="navBar">
             <a class="navbar-brand" href="${indexPage}">
@@ -185,7 +205,18 @@ function buildNavBar(page) {
           </div>
         </nav>
 `;
-  putHTML("encabezado", navBar, "Error ");
+  }
+  return navBar
+}
+const finalNavBarHTML = actualizarNavbar();
+    putHTML("encabezado", finalNavBarHTML, "Error ");
+}
+
+function logOut(){
+  localStorage.removeItem('userToken');
+  let page = document.querySelector("div");
+  buildNavBar(page);
+  window.location.href = 'index.html';
 }
 window.addEventListener("load", function () {
   let page = document.querySelector("div");

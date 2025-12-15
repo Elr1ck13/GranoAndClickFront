@@ -193,7 +193,7 @@ async function cargarProductosLocales() {
     );
 
     const cafeLocales = productosLocalesConUrlsValidas.filter(item => item.categoria === "cafe");
-    const postreLocales = productosLocalesConUrlsValidas.filter(item => item.categoria === "postre");
+    const postreLocales = productosLocalesConUrlsValidas.filter(item => item.categoria === "pasteleria");
 
     if (cards_cafe) {
       cards_cafe.insertAdjacentHTML("beforeend", createCards(cafeLocales));
