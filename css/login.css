@@ -7,7 +7,6 @@ html {
   --textColor: #FFFFFF;
   --hgColor: #FDF5AA;
   --mainFamilyFont: "Outfit", sans-serif;
-
 }
 
 body {
@@ -34,7 +33,6 @@ body {
   border-radius: 2rem;
   box-shadow: 0 0.3rem 0.5rem -0.12rem black;
   font-family: var(--mainFamilyFont);
-
 }
 
 .navbar-toggler {
@@ -78,13 +76,14 @@ a#carrito {
 }
 
 .form-login {
-  background-color: var(--primaryColor);
-  border: 1px solid var(--hgColor);
+  background-color: #011C40; 
+  border: none; 
   border-radius: 1rem;
-  box-shadow: -0.7rem 1rem 1rem -0.12rem black;
+  box-shadow: none; 
   max-width: 20rem;
+  width: 100%;
   height: auto;
-  padding: 2rem;
+  padding: 2rem 2rem;
 }
 
 .frminp {
@@ -92,13 +91,15 @@ a#carrito {
   width: 15.5rem;
   height: 2.3rem;
   padding: 10px 15px;
+  background-color: #FFFFFF;
+  color: #011C40; 
 }
 
 .frminp::placeholder {
-  color: var(--bgColor);
+  color: #26658C; 
 }
 
-.Btn{
+.Btn {
   margin-top: 1rem;
   margin-bottom: 0.5rem;
   width: 15.5rem;
@@ -106,14 +107,14 @@ a#carrito {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--hgColor);
+  background-color: #FDF5AA;
   border: none;
   border-radius: 0.5rem;
-  color: var(--primaryColor);
+  color: #011C40;
   font-weight: 600;
   gap: 8px;
   cursor: pointer;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.103);
+  box-shadow: none; 
   position: relative;
   overflow: hidden;
   transition-duration: .3s;
@@ -124,7 +125,7 @@ a#carrito {
 }
 
 .svgIcon path {
-  fill: var(--primaryColor);
+  fill: #011C40;
 }
 
 .Btn::before {
@@ -132,7 +133,7 @@ a#carrito {
   height: 2.3rem;
   position: absolute;
   content: "";
-  background-color: var(--secondaryColor);
+  background-color: #023859; 
   border-radius: 0.5rem;
   left: -100%;
   top: 0;
@@ -147,13 +148,13 @@ a#carrito {
 }
 
 @media (max-width: 390px) {
-  .Btn{
+  .Btn {
     transition: none !important;
     animation: none !important;
     transform: none !important;
   }
 
-  .Btn::before{
+  .Btn::before {
     transition: none !important;
     transform: none !important;
     left: 0 !important;
@@ -161,19 +162,18 @@ a#carrito {
     background-color: transparent !important;
   }
 
-  .Btn:hover{
+  .Btn:hover {
     transform: none !important;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.103) !important;
   }
 
-  .Btn:hover::before{
+  .Btn:hover::before {
     transform: none !important;
   }
 
-  .Btn:active{
+  .Btn:active {
     transform: none !important;
   }
-
 }
 
 @media (max-width: 768px) {
