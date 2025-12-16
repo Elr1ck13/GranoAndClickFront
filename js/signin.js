@@ -20,7 +20,7 @@ const alertMessages = document.getElementById("alert-messages");
 let errors = [];
 
 const regs = {
-  name: /^(?!.*[<>;\'\"\\\/])[A-Za-záéíóúñ]{2,}(?:[\s][A-Za-záéíóúñ]{2,}){0,98}$/,
+  name: /^(?!.*[<>;\'\"\\\/])[A-Za-záéíóúñ]{3,}(?:[\s][A-Za-záéíóúñ]{2,}){0,98}$/,
   email: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
   street: /^(?=.{3,100}$)(?!.*\s{2,})(?=.*\b\d{1,5}\b)[A-Za-zÁÉÍÓÚÜÑáéíóúüñ][A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9 .,'#\/\-°ª()]*$/,
   neighborhood: /^(?=.{3,80}$)(?!.*\s{2,})(?=.*[A-Za-zÁÉÍÓÚÜÑáéíóúüñ])[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9][A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9 .,'\-]*$/,
@@ -39,7 +39,7 @@ function cleanAlert() {
 }
 
 function cleanErrors() {
-  const inputs = [userName, userLastName, userEmail, userConfirmEmail, userPhone, userBirthDate, userAddress, userPostalCode, userPassword, userConfirmPassword];
+  const inputs = [userName, userLastName, userEmail, userConfirmEmail, userPhone, userBirthDate, userStreet, userNeighborhood, userCounty, userPostalCode, userPassword, userConfirmPassword];
   inputs.forEach(input => {
     input.classList.remove("input-invalid-glow", "input-valid-glow");
     input.style.border = "";
@@ -59,6 +59,7 @@ function applyGlowClass(element, isValid) {
     element.classList.add("input-invalid-glow");
   }
 }
+
 function validateField(element, regex, errorField) {
   const isValid = regex.test(element.value);
 
@@ -66,7 +67,7 @@ function validateField(element, regex, errorField) {
     applyGlowClass(element, false);
     errors.push(errorField);
     return false;
-  }//if
+  } //if
 
   applyGlowClass(element, true);
   return true;
@@ -80,40 +81,41 @@ function isAdult(birthDateString) {
 
   if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
     age--;
-  }//if
+  } //if
 
   return age >= 18 && age <= 100;
 }
 
 function validateInfo() {
   let veredict = true;
-  veredict &= validateField(userName, regs.name, "Nombre");
-  veredict &= validateField(userLastName, regs.name, "Apellido");
-  veredict &= validateField(userEmail, regs.email, "Correo");
-  veredict &= validateField(userPhone, regs.phone, "Teléfono");
-  veredict &= validateField(userStreet, regs.street, "Calle y número");
-  veredict &= validateField(userNeighborhood, regs.neighborhood, "Colonia");
-  veredict &= validateField(userCounty, regs.county, "Municipio");
-  veredict &= validateField(userPostalCode, regs.postalCode, "Código Postal");
-  veredict &= validateField(userPassword, regs.password, "Contraseña");
+  errors = [];
 
+   veredict = validateField(userName, regs.name, "Nombre") && veredict;
+  veredict = validateField(userLastName, regs.name, "Apellido") && veredict;
+  veredict = validateField(userEmail, regs.email, "Correo") && veredict;
+  veredict = validateField(userPhone, regs.phone, "Teléfono") && veredict;
+  veredict = validateField(userStreet, regs.street, "Calle y número") && veredict;
+  veredict = validateField(userNeighborhood, regs.neighborhood, "Colonia") && veredict;
+  veredict = validateField(userCounty, regs.county, "Municipio") && veredict;
+  veredict = validateField(userPostalCode, regs.postalCode, "Código Postal") && veredict;
+  veredict = validateField(userPassword, regs.password, "Contraseña") && veredict;
 
-
-  if (!userBirthDate.value) {
+    if (!userBirthDate.value) {
     applyGlowClass(userBirthDate, false);
-    errors.push("Fecha de Nacimiento");
+    errors.push("Fecha de Nacimiento (Requerida)");
     veredict = false;
   } else if (!isAdult(userBirthDate.value)) {
     applyGlowClass(userBirthDate, false);
-    errors.push("Fecha de Nacimiento");
+    errors.push("Fecha de Nacimiento (Debes ser mayor de 18)");
     veredict = false;
   } else {
     applyGlowClass(userBirthDate, true);
   }
 
+  
   if (userConfirmPassword.value.trim() === "") {
     applyGlowClass(userConfirmPassword, false);
-    errors.push("Confirmar Contraseña");
+    errors.push("Confirmar Contraseña (Requerida)");
     veredict = false;
   } else if (userConfirmPassword.value !== userPassword.value) {
     applyGlowClass(userConfirmPassword, false);
@@ -125,7 +127,7 @@ function validateInfo() {
 
   if (userConfirmEmail.value.trim() === "") {
     applyGlowClass(userConfirmEmail, false);
-    errors.push("Confirmar Correo");
+    errors.push("Confirmar Correo (Requerido)");
     veredict = false;
   } else if (userConfirmEmail.value !== userEmail.value) {
     applyGlowClass(userConfirmEmail, false);
@@ -139,7 +141,7 @@ function validateInfo() {
 }
 
 function userExist(email, userList) {
-  email = (email?? "").toLowerCase().trim();
+  email = (email ?? "").toLowerCase().trim();
   for (const user of userList) {
     if (user.correo === email) {
       return true;
@@ -148,10 +150,10 @@ function userExist(email, userList) {
   return false;
 }
 
-function getUsersFromLocalStorage(){
-  try{
+function getUsersFromLocalStorage() {
+  try {
     return JSON.parse(localStorage.getItem("usuarios")) || [];
-  }catch{
+  } catch {
     return [];
   }
 }
@@ -159,89 +161,97 @@ function getUsersFromLocalStorage(){
 function createObjectUser() {
   const newIdNum = Math.floor(Date.now() / 1000);
   const userId = `${newIdNum}`;
-    const userModel = {
-        "id": userId,
-        "nombre": userName.value,
-        "apellido": userLastName.value,
-        "correo": (userEmail.value??"").toLowerCase().trim(),
-        "fechaNacimiento": userBirthDate.value,
-        "calleNumero": userStreet.value,
-        "colonia": userNeighborhood.value,
-        "municipio": userCounty.value,
-        "codigoPostal": userPostalCode.value,
-        "telefono": userPhone.value,
-        "password": userPassword.value,
-    };
-    saveUserInLocalStorage(userModel);
+  const userModel = {
+    "id": userId,
+    "nombre": userName.value,
+    "apellido": userLastName.value,
+    "correo": (userEmail.value ?? "").toLowerCase().trim(),
+    "fechaNacimiento": userBirthDate.value,
+    "calleNumero": userStreet.value,
+    "colonia": userNeighborhood.value,
+    "municipio": userCounty.value,
+    "codigoPostal": userPostalCode.value,
+    "telefono": userPhone.value,
+    "password": userPassword.value,
+  };
+  saveUserInLocalStorage(userModel);
 }
 
 function saveUserInLocalStorage(user) {
-    const usersSaved = JSON.parse(localStorage.getItem('usuarios')) || [];
-    usersSaved.push(user);
-    localStorage.setItem('usuarios', JSON.stringify(usersSaved));
+  const usersSaved = JSON.parse(localStorage.getItem('usuarios')) || [];
+  usersSaved.push(user);
+  localStorage.setItem('usuarios', JSON.stringify(usersSaved));
 }
 
 function addUser() {
-  fetch("../data/usuarios.json")
+  cleanErrors();
+
+  fetch("../data/usuarios.json") 
     .then((res) => res.json())
     .then((data) => {
       users = data;
       const localUsers = getUsersFromLocalStorage();
       const allUsers = [...users, ...localUsers];
-      if (validateInfo()) {
-        if (!userExist(userEmail.value, allUsers)) {
-          cleanErrors();
-          createObjectUser();
 
-          alertMessages.insertAdjacentHTML(
-            "beforeend",
-            `<div class="alert alert-success alert-success-glow">
-            <p class="custom-alert-title">¡Registro Exitoso!</p> 
-            <p><strong>Usuario agregado correctamente.</strong></p>
-            </div>`);
-            form.reset();
-        } else {
-
-          applyGlowClass(userEmail, false);
-          applyGlowClass(userConfirmEmail, false);
-
-          alertMessages.insertAdjacentHTML(
-            "beforeend",
-            `<div class="alert alert-danger alert-error-glow">
+      if (!userExist(userEmail.value, allUsers)) {
+        createObjectUser();
+        alertMessages.insertAdjacentHTML(
+          "beforeend",
+          `<div class="alert alert-success alert-success-glow">
+          <p class="custom-alert-title">¡Registro Exitoso!</p> 
+          <p><strong>Usuario agregado correctamente. Serás redirigido al login.</strong></p>
+          </div>`);
+        form.reset();
+        setTimeout(() => { window.location.href = "../html/login.html"; }, 2000);
+      } else {
+        applyGlowClass(userEmail, false);
+        applyGlowClass(userConfirmEmail, false);
+        alertMessages.insertAdjacentHTML(
+          "beforeend",
+          `<div class="alert alert-danger alert-error-glow">
           <p class="custom-alert-title">Error: Usuario Existente</p>
           <p><strong>El correo: ${userEmail.value} ya está registrado.</strong></p>
           </div>`
-          );
-        }
-      } else {
-        const listaCampos = errors.map(campo => {
-          const campoMayuscula = campo.charAt(0).toUpperCase() + campo.slice(1);
-          return `<li>${campoMayuscula}</li>`;
-        }).join("");
-
-        const mensajeHTML = `
-        <div class="alert alert-danger alert-error-glow">
-        <p class="custom-alert-title">¡Error de Validación!</p>
-        <p><strong>Los siguientes campos no son válidos:</strong></p>
-        <ul class="custom-alert-list">
-        ${listaCampos}
-        </ul>
-        </div>
-      `;
-        alertMessages.insertAdjacentHTML("beforeend", mensajeHTML);
+        );
       }
     })
     .catch((error) => {
-      console.log(error.message);
-
+      console.error("Error en addUser (fetch):", error.message);
       cleanAlert();
       alertMessages.insertAdjacentHTML(
         "beforeend",
         `<div class="alert alert-danger alert-error-glow">
-      <p class="custom-alert-title">Error de Conexión</p> 
-      <p><strong>Error al cargar datos: ${error.message}</strong></p>
-      </div>`);
+        <p class="custom-alert-title">Error de Conexión</p> 
+        <p><strong>Error al cargar datos o registrar: ${error.message}</strong></p>
+        </div>`);
     });
+}
+
+function handleAddUserFlow(event) {
+  event.preventDefault();
+  cleanErrors();
+
+  if (!validateInfo()) {
+    const listaCampos = errors.map(campo => {
+      const campoMayuscula = campo.charAt(0).toUpperCase() + campo.slice(1);
+      return `<li>${campoMayuscula}</li>`;
+    }).join("");
+
+    const mensajeHTML = `
+    <div class="alert alert-danger alert-error-glow">
+    <p class="custom-alert-title">¡Error de Validación!</p>
+    <p><strong>Los siguientes campos no son válidos o están incompletos:</strong></p>
+    <ul class="custom-alert-list">
+    ${listaCampos}
+    </ul>
+    </div>
+    `;
+    alertMessages.insertAdjacentHTML("beforeend", mensajeHTML);
+
+    return;
+  }
+
+  addUser();
 }
 
 const fieldsToValidate = [
@@ -249,7 +259,9 @@ const fieldsToValidate = [
   { element: userLastName, reg: regs.name },
   { element: userEmail, reg: regs.email },
   { element: userPhone, reg: regs.phone },
-  { element: userAddress, reg: regs.address },
+  { element: userStreet, reg: regs.street },
+  { element: userNeighborhood, reg: regs.neighborhood },
+  { element: userCounty, reg: regs.county },
   { element: userPostalCode, reg: regs.postalCode },
   { element: userPassword, reg: regs.password }
 ];
@@ -287,19 +299,7 @@ userBirthDate.addEventListener("input", () => {
   applyGlowClass(userBirthDate, isValid);
 });
 
-
 btnSignin.addEventListener("click", handleAddUserFlow);
-
-function handleAddUserFlow(event) {
-  event.preventDefault();
-  addUser();
-}
-
-fetch("../data/usuarios.json")
-  .then((res) => res.json())
-  .then((data) => {
-    users = data;
-  });
 
 btnCancel.addEventListener("click", function (event) {
   event.preventDefault();
