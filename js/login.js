@@ -11,32 +11,31 @@ const regs = {
   password:
     /^(?!.*(?:abc123|abcdef|abcd1234|123456|1234567|12345678|qwerty|asdfgh|zxcvbn|password|pass123|admin|usuario|welcome))(?!.*(.)\1\1)(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[~!@#$%^&*()_\-+=])(?!.*\s)[A-Za-z\d~!@#$%^&*()_\-+=]{8,12}$/,
 };
+
 function alertMessages(msg) {
   console.log(msg);
-
 }
 
 function compararPassword() {
   if (usuarios.length === 0) return false;
-  
   for (const usuario of usuarios) {
-    
-    if (usuario.password=== localPass.value && usuario.correo === localCorreo.value) {
+    if (usuario.password === localPass.value && usuario.correo === localCorreo.value) {
       let rolAsignado = 'client';
       if (usuario.id.startsWith('AD')) {
                 rolAsignado = 'admin';
             }
-            localStorage.setItem('userToken', usuario.correo); 
+            localStorage.setItem('userToken', usuario.correo);
             localStorage.setItem('userId', usuario.id);
             localStorage.setItem('userRole', rolAsignado);
+            localStorage.setItem('userName', usuario.nombre);
       alertMessages("Bienvenido "+ usuario.nombre);
       return true
-    } 
+    }
   }
   alertMessages("Alguno de los campos no es correcto");
   localStorage.removeItem('userToken');
-    localStorage.removeItem('userRole');
-    return false;
+  localStorage.removeItem('userRole');
+  return false;
 
 }
 
@@ -58,15 +57,20 @@ function existeCorreo() {
 }
 
 function validaPrevio() {
-  let veredict = true;
+  /*let veredict = true;
 
   veredict &= validateField(localCorreo, regs.email, "Correo");
   veredict &= validateField(localPass, regs.password, "Contraseña");
 
-  return veredict;
+  return veredict;*/
+
+  const correoOk = regs.email.test(localCorreo.value.trim());
+  const passOk = localPass.value.trim().length>0;
+  return correoOk && passOk;
 }
+
 function loadAdmins(){
-    
+
   fetch("../data/usuarios.json")
     .then((res) => res.json())
     .then((data) => {
@@ -80,17 +84,18 @@ function loadAdmins(){
       console.log(error.message);
     });
 }
+
 function usuarioAceptado() {
       window.location.href = "../html/productos.html";
 }
+
 btnSend.addEventListener("click", function (event) {
   event.preventDefault();
   if (validaPrevio()) {
     if(compararPassword()){ // <--- Debería guardar en localStorage y luego redirigir
-        buildNavBar(pageElementForNavbar);
         usuarioAceptado(); // <--- Aquí está la redirección
         form.reset();
-    } 
+    }
   } else {
     alertMessages("Alguno de los campos no es válido");
   }
