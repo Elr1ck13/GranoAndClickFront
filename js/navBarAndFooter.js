@@ -136,8 +136,30 @@ function buildNavBar(page) {
   let productPage = getPagePaths(page, "productos.html")
   let logPage = getPagePaths(page, "login.html");
   let signPage = getPagePaths(page, "signin.html");
+  let formularioCreacion = getPagePaths(page, "formularioCreacion.html");
 
-  const navBar = `
+
+  function actualizarNavbar() {
+    const userToken = localStorage.getItem('userToken');
+    const userId = localStorage.getItem('userId');
+    const userIsAuthenticated = userToken !== null;
+    let navBar;
+
+    if (userIsAuthenticated) {
+      let adminLink = '';
+      if (userId && userId.startsWith('AD')) {
+        adminLink = `Aqui va la estructura de la pagina de creacion de productos`;
+      }
+
+      navBar = `aqui va la navbar completa para cliente
+      <div class="collapse navbar-collapse" id="mainNavbarContent">
+    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+        ${adminLink}  /// <--- Esta es el fragmento que tendrias que agregar a tu codigo que hara que aparezca o no la opcion de pagina de creacion de Producto, ya declare la variable pero la puedes cambiar.
+    </ul>
+      
+      `;
+    } else {
+      navBar = `
   <nav class="navbar navbar-dark navbar-expand-lg mt-2">
           <div class="container" id="navBar">
             <a class="navbar-brand" href="${indexPage}">
@@ -185,8 +207,22 @@ function buildNavBar(page) {
           </div>
         </nav>
 `;
-  putHTML("encabezado", navBar, "Error ");
+    }
+    return navBar
+  }
+  const finalNavBarHTML = actualizarNavbar();
+  putHTML("encabezado", finalNavBarHTML, "Error ");
 }
+
+function logOut() {
+  localStorage.removeItem('userToken');
+  localStorage.removeItem('userId');
+
+  let page = document.querySelector("div");
+  buildNavBar(page);
+  window.location.href = 'index.html';
+}
+
 window.addEventListener("load", function () {
   let page = document.querySelector("div");
   buildFooter(page);
