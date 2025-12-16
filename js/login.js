@@ -3,6 +3,7 @@ const localCorreo = document.getElementById("emails");
 const localPass = document.getElementById("pass");
 const btnSend = document.getElementById("send");
 let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+const pageElementForNavbar = document.querySelector("div");
 
 const regs = {
   email:
@@ -10,8 +11,8 @@ const regs = {
   password:
     /^(?!.*(?:abc123|abcdef|abcd1234|123456|1234567|12345678|qwerty|asdfgh|zxcvbn|password|pass123|admin|usuario|welcome))(?!.*(.)\1\1)(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[~!@#$%^&*()_\-+=])(?!.*\s)[A-Za-z\d~!@#$%^&*()_\-+=]{8,12}$/,
 };
-function alertMessages(msg){
-    console.log(msg);
+function alertMessages(msg) {
+  console.log(msg);
 
 }
 
@@ -21,11 +22,20 @@ function compararPassword() {
   for (const usuario of usuarios) {
     
     if (usuario.password=== localPass.value && usuario.correo === localCorreo.value) {
+      let rolAsignado = 'client';
+      if (usuario.id.startsWith('AD')) {
+                rolAsignado = 'admin';
+            }
+            localStorage.setItem('userToken', usuario.correo); 
+            localStorage.setItem('userId', usuario.id);
+            localStorage.setItem('userRole', rolAsignado);
       alertMessages("Bienvenido "+ usuario.nombre);
       return true
     } 
   }
   alertMessages("Alguno de los campos no es correcto");
+  localStorage.removeItem('userToken');
+    localStorage.removeItem('userRole');
     return false;
 
 }
@@ -60,8 +70,11 @@ function loadAdmins(){
   fetch("../data/usuarios.json")
     .then((res) => res.json())
     .then((data) => {
-        usuarios.push(data[0])
+        if (data.length > 0 && !usuarios.some(u => u.id === data[0].id)) {
+            usuarios.push(data[0])
+        }
         localStorage.setItem("usuarios", JSON.stringify(usuarios));
+        usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
     })
     .catch((error) => {
       console.log(error.message);
@@ -73,17 +86,15 @@ function usuarioAceptado() {
 btnSend.addEventListener("click", function (event) {
   event.preventDefault();
   if (validaPrevio()) {
-    if (existeCorreo()) {
-      if(compararPassword()){
-        usuarioAceptado();
+    if(compararPassword()){ // <--- Debería guardar en localStorage y luego redirigir
+        buildNavBar(pageElementForNavbar);
+        usuarioAceptado(); // <--- Aquí está la redirección
         form.reset();
-      }
-    }
+    } 
   } else {
     alertMessages("Alguno de los campos no es válido");
   }
 });
-
 window.addEventListener("load",function (event) {
       if (usuarios.length === 0) loadAdmins();
 });

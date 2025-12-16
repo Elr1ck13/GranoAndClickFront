@@ -1,4 +1,3 @@
-
 let users = [];
 
 const form = document.getElementById("signinForm");
@@ -32,7 +31,7 @@ function cleanAlert() {
     while (alertMessages.lastChild) {
       alertMessages.removeChild(alertMessages.lastChild);
     }
-  }//if
+  } //if
 }
 
 function cleanErrors() {
@@ -162,9 +161,9 @@ function createObjectUser() {
 }
 
 function saveUserInLocalStorage(user) {
-  const usersSaved = JSON.parse(localStorage.getItem('usuarios')) || [];
-  usersSaved.push(user);
-  localStorage.setItem('usuarios', JSON.stringify(usersSaved));
+    const usersSaved = JSON.parse(localStorage.getItem('usuarios')) || [];
+    usersSaved.push(user);
+    localStorage.setItem('usuarios', JSON.stringify(usersSaved));
 }
 
 function addUser() {
