@@ -24,7 +24,7 @@ html {
   border-radius: 0.4rem;
   width: 100%;
   height: 2.3rem;
-  padding: 10px 15px;
+  padding: 0.625rem 0.938rem;
   display: block;
   outline: none;
   transition: box-shadow 0.3s ease-in-out;
@@ -72,8 +72,8 @@ input[type="date"].frminp::-webkit-calendar-picker-indicator {
   border: none;
   border-radius: 0.5rem;
   color: #011C40;
-  font-weight: 600;
-  gap: 8px;
+  font-weight: 38rem;
+  gap: 0.5rem;
   cursor: pointer;
   position: relative;
   overflow: hidden;
@@ -139,13 +139,6 @@ input[type="date"].frminp::-webkit-calendar-picker-indicator {
 
 @media (max-width: 768px) {
 
-  .Btn,
-  .Btn2 {
-    width: 100%;
-  }
-}
-
-@media (max-width: 768px) {
   .form-signin {
     height: auto;
     padding: 1.5rem;
@@ -201,7 +194,7 @@ input[type="date"].frminp::-webkit-calendar-picker-indicator {
   color: var(--hgColor);
   margin-bottom: 0.5rem;
   font-size: 1.3rem;
-  font-weight: 700;
+  font-weight: 43.75rem;
 }
 
 .custom-alert-list {

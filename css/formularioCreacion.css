@@ -9,10 +9,11 @@
     --mainFamilyFont: "Outfit", sans-serif;
 }
 
-.page-header {
+.form-title {
     color: var(--textColor);
-    padding-top: 1.5rem;
-    border-radius: 0 0 10px 10px;
+    font-size: 2.5rem;
+    font-weight: 38rem;
+    font-family: var(--mainFamilyFont);
 }
 
 .product-form-container {
@@ -72,8 +73,6 @@
     }
 }
 
-/* --- ESTILOS DE ALERTAS PERSONALIZADAS --- */
-
 .form-control.input-invalid-glow {
     border-color: #ff4d4d !important;
     box-shadow: 0 0 0.8rem rgba(255, 77, 77, 0.9);
@@ -85,7 +84,6 @@
     box-shadow: 0 0 0.8rem rgba(102, 255, 102, 0.5);
     transition: box-shadow 0.3s ease-in-out;
 }
-
 
 #alert-messages .alert {
     background-color: var(--primaryColor);
@@ -113,7 +111,7 @@
     color: var(--hgColor);
     margin-bottom: 0.5rem;
     font-size: 1.3rem;
-    font-weight: 700;
+    font-weight:43.75rem;
 }
 
 .custom-alert-list {
