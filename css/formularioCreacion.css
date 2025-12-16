@@ -25,9 +25,7 @@
 .form-control {
     background-color: white;
     color: var(--primaryColor);
-    border: 0.063rem solid var(--fifthColor);
     padding: 0.625rem;
-    transition: all 0.3s;
 }
 
 .form-select .productCategory {
