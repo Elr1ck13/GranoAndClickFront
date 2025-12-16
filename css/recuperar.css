@@ -1,90 +1,12 @@
-html {
-  --primaryColor: #011C40;
-  --secondaryColor: #023859;
-  --bgColor: #26658C;
-  --fifthColor: #54ACBF;
-  --color-light: #A7EBF2;
-  --textColor: #FFFFFF;
-  --hgColor: #FDF5AA;
-  --mainFamilyFont: "Outfit", sans-serif;
-
-}
-
-body {
-  font-family: var(--mainFamilyFont);
-  background: linear-gradient(90deg, var(--secondaryColor) 0%, var(--bgColor) 100%);
-  min-height: 100vh;
-  color: var(--textColor);
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-#navBar,
-#navbar-nav a:visited,
-#navbar-nav a:hover,
-#navbar-nav a:active,
-#nav-link a {
-  height: 55px;
-  background-color: var(--bgColor);
-  color: #FFFFFF;
-  text-decoration: none;
-  border-radius: 2rem;
-  box-shadow: 0 0.3rem 0.5rem -0.12rem black;
-  font-family: var(--mainFamilyFont);
-
-}
-
-.navbar-toggler {
-  background-color: var(--primaryColor);
-  border-radius: 50rem;
-}
-
-@media (max-width: 991.98px) {
-  .navbar {
-    position: relative;
-  }
-
-  #mainNavbarContent {
-    position: absolute;
-    top: 85%;
-    right: 0;
-    width: 10rem;
-    background-color: var(--primaryColor);
-    padding: 1rem;
-    border-radius: 1rem;
-    z-index: 1000;
-  }
-}
-
-.nav-link {
-  color: var(--textColor);
-  font-weight: 600;
-}
-
-.nav-link:hover {
-  color: var(--hgColor);
-  font-weight: 600;
-}
-
-#carrito,
-a#carrito {
-  background-color: var(--hgColor);
-  border-radius: 0.5rem;
-  color: black;
-  box-shadow: 0 0.3rem 0.5rem -0.12rem black;
-}
-
-.form-recuperarContra {
-  background-color: var(--primaryColor);
-  border: 1px solid var(--hgColor);
-  border-radius: 1rem;
-  box-shadow: -0.7rem 1rem 1rem -0.12rem black;
-  max-width: 20rem;
-  height: auto;
-  padding: 2rem;
+.form-recuperarContra { 
+  background-color: var(--primaryColor)!important;
+  border: none !important; 
+  border-radius: 1rem!important;
+  box-shadow: none !important;
+  max-width: 20rem!important;
+  height: auto!important;
+  padding: 2rem!important;
+  text-align: center; 
 }
 
 .Btn{
@@ -191,3 +113,23 @@ a#carrito {
     margin-bottom: 1rem;
   }
 }
+
+.form-recuperarContra h1 {
+  text-align: center;
+  color: var(--textColor);
+  margin-bottom: 1rem;
+}
+
+.form-recuperarContra .Btn {
+  transition: background-color 0.2s ease-in-out !important;
+}
+
+.form-recuperarContra .Btn::before {
+  display: none !important;
+}
+
+.form-recuperarContra .Btn:hover {
+  background-color: #f6e77a;
+  color: var(--primaryColor);
+}
+

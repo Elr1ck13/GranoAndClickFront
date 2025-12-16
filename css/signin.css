@@ -5,7 +5,7 @@ html {
   --fifthColor: #54ACBF;
   --color-light: #A7EBF2;
   --textColor: #FFFFFF;
-  --hgColor: #FDF5AA; /* Color de los botones */
+  --hgColor: #FDF5AA; 
   --mainFamilyFont: "Outfit", sans-serif;
 }
 
@@ -58,10 +58,9 @@ a#carrito {
   box-shadow: 0 0.3rem 0.5rem -0.12rem black;
 }
 
-/* RECUADRO FORMULARIO */
 .form-signin {
-  background-color: #011C40; /* Azul oscuro */
-  border-radius: 0.5rem; /* Bordes redondeados */
+  background-color: #011C40;
+  border-radius: 0.5rem; 
   max-width: 45rem;
   padding: 2rem;
   margin-bottom: 5rem;
@@ -69,7 +68,6 @@ a#carrito {
   color: white;
 }
 
-/* INPUTS */
 .frminp {
   border-radius: 0.4rem;
   width: 100%;
@@ -83,13 +81,11 @@ a#carrito {
   color: var(--bgColor);
 }
 
-/* LABELS */
 .frmlbl {
   margin-bottom: 0.3rem;
   display: block;
 }
 
-/* COLUMNAS */
 .column-signin {
   display: flex;
   flex-direction: column;
@@ -100,8 +96,6 @@ a#carrito {
   font-size: small;
 }
 
-/* BOTONES - IGUAL QUE CONTACTO Y LOGIN */
-/* BOTONES PRINCIPALES */
 .Btn,
 .Btn2 {
   margin-top: 1rem;
@@ -111,10 +105,10 @@ a#carrito {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #FDF5AA; /* Color base amarillo */
+  background-color: #FDF5AA; 
   border: none;
   border-radius: 0.5rem;
-  color: #011C40; /* Texto siempre visible */
+  color: #011C40; 
   font-weight: 600;
   gap: 8px;
   cursor: pointer;
@@ -123,20 +117,17 @@ a#carrito {
   transition: background-color 0.3s ease;
 }
 
-/* Hover: amarillo más fuerte, sin afectar el texto */
 .Btn:hover,
 .Btn2:hover {
-  background-color: #FFE66D; /* Tono más fuerte de amarillo */
-  color: #011C40; /* Texto sigue visible */
+  background-color: #FFE66D;
+  color: #011C40; 
 }
 
-/* Eliminamos la animación azul oscuro */
 .Btn::before,
 .Btn2::before {
   content: none;
 }
 
-/* Iconos SVG */
 .svgIcon {
   width: 1.3rem;
 }
@@ -145,7 +136,6 @@ a#carrito {
   fill: #011C40;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .Btn,
   .Btn2 {
