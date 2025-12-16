@@ -10,11 +10,12 @@ const productImage = document.getElementById("productImage");
 let errors = [];
 
 let regs = {
-  name: /^[A-Za-zÀ-ÿ0-9\s]{4,70}$/,
+  name: /^[A-Za-zÀ-ÿ0-9\s]{3,70}$/,
   description: /^(?=.{5,70}$)[A-Za-z0-9 ]{5,70}$/,
   price: /^(?!0)([1-9][0-9]{0,2}|[1-9]{1,2})$/, //maximo 999
   url: /^(https?:\/\/)([a-zA-Z0-9.-]+)(:[0-9]{1,5})?(\/(?!.*\s).*\.(jpg|jpeg|png|webp|svg|JPG|JPEG|PNG||WEBP|SVG))$/
 };
+
 function cleanAlert() {
   if (alertMessages.lastChild) {
     while (alertMessages.lastChild) {
@@ -22,32 +23,50 @@ function cleanAlert() {
     }
   }
 }
+
+function applyGlowClass(element, isValid) {
+  element.style.border = "";
+  if (isValid) {
+    element.classList.remove("input-invalid-glow");
+    element.classList.add("input-valid-glow");
+  } else {
+    element.classList.remove("input-valid-glow");
+    element.classList.add("input-invalid-glow");
+  }
+}
+
 function cleanErrors() {
-  productName.style.border = "none";
-  productCategory.style.border = "none";
-  productDescription.style.border = "none";
-  productPrice.style.border = "none";
-  productImage.style.border = "none";
+  const inputs = [productName, productCategory, productDescription, productPrice, productImage];
+  inputs.forEach(input => {
+    input.classList.remove("input-invalid-glow", "input-valid-glow");
+    input.style.border = "";
+  });
   cleanAlert();
   errors = [];
 }
 
-
 function validateField(element, regex, errorField) {
-  if (!regex.test(element.value)) {
-    element.style.border = "0.12rem solid red";
+  const isValid = regex.test(element.value);
+
+  if (!isValid) {
+    applyGlowClass(element, false);
     errors.push(errorField);
     return false;
   }
+
+  applyGlowClass(element, true);
   return true;
 }
- function validateInfo() {
+
+function validateInfo() {
   let veredict = true;
   veredict &= validateField(productName, regs.name, "Nombre");
   if (productCategory.value !== "cafe" && productCategory.value !== "pasteleria") {
-    productCategory.style.border = "0.12rem solid red";
+    applyGlowClass(productCategory, false);
     errors.push("Categoría");
     veredict = false;
+  } else {
+    applyGlowClass(productCategory, true);
   }
   veredict &= validateField(
     productDescription,
@@ -55,8 +74,8 @@ function validateField(element, regex, errorField) {
     "Descripción"
   );
   veredict &= validateField(productPrice, regs.price, "Precio");
-  veredict &= validateField(productImage, regs.url, "Url") ;
-  
+  veredict &= validateField(productImage, regs.url, "Url");
+
   return veredict;
 }
 
@@ -77,27 +96,26 @@ function productExist(name, productList) {
   return false;
 }
 function validarImagen(url) {
-    const defaultImage = "../assets/Producto/producto_nuevo.png"; 
-    if (!url || url.trim() === "") {
-        return Promise.resolve(defaultImage);
-    } 
-    return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.onload = () => {
-            resolve(url);
-        };
-        img.onerror = () => {
-            resolve(defaultImage);
-        };
-        img.src = url;
-    });
+  const defaultImage = "../assets/Producto/producto_nuevo.png";
+  if (!url || url.trim() === "") {
+    return Promise.resolve(defaultImage);
+  }
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      resolve(url);
+    };
+    img.onerror = () => {
+      resolve(defaultImage);
+    };
+    img.src = url;
+  });
 }
 
 function crearObjetoProducto(finalPhotoUrl) {
   const category = productCategory.value;
   const nuevoIdNum = Math.floor(Date.now() / 1000);
   const productId = `${category}_${nuevoIdNum}`;
-  const photoUrl = productImage.value;
 
   const productoModel = {
     "id": productId,
@@ -117,42 +135,62 @@ function guardarProductoEnLocalStorage(producto) {
 }
 
 async function addProduct() {
-const res = await fetch("../data/productos.json");
-    const data = await res.json();
-    products = data;
-      if (validateInfo()) {
-        if (!productExist(productName.value, products)) {
-          cleanErrors();
-  const urlIngresada = productImage.value;
-            const urlValidada = await validarImagen(urlIngresada); 
-            if (urlValidada !== urlIngresada) {
-                alertMessages.insertAdjacentHTML(
-                    "beforeend",
-                    `<strong> ⚠️ Advertencia: La URL de la imagen que proporcionó no es válida. Se utilizará la imagen por defecto: ${urlValidada} </strong>`
-                );
-                productImage.style.border = "0.12rem solid orange";
-            }
-            crearObjetoProducto(urlValidada);
-            
-            alertMessages.insertAdjacentHTML(
-                "beforeend",
-                "<strong>Producto agregado correctamente.</strong>"
-            );
-            form.reset();
-        } else {
-          alertMessages.insertAdjacentHTML(
-            "beforeend",
-            `<strong> El producto ${productName.value} ya existe</strong>`
-          );
-        }
-      } else {
-        let msg = `Lo sentimos, pero los siguientes campos no son válidos: `;
+  const res = await fetch("../data/productos.json");
+  const data = await res.json();
+  products = data;
+
+  if (validateInfo()) {
+    if (!productExist(productName.value, products)) {
+      cleanErrors();
+      const urlIngresada = productImage.value;
+      const urlValidada = await validarImagen(urlIngresada);
+      if (urlValidada !== urlIngresada) {
         alertMessages.insertAdjacentHTML(
           "beforeend",
-          "<strong>" + msg + errors.join(", ") + "</strong>"
-        );
+          `<div class="alert alert-danger alert-error-glow">
+          <p class="custom-alert-title">¡Advertencia de Imagen!</p>
+          <p><strong>La URL de la imagen no es válida. Se usará la imagen por defecto.</strong></p>
+          </div>`);
+        applyGlowClass(productImage, false);
+      } else {
+        applyGlowClass(productImage, true);
       }
+      crearObjetoProducto(urlValidada);
+
+      alertMessages.insertAdjacentHTML(
+        "beforeend",
+        `<div class="alert alert-success alert-success-glow">
+        <p class="custom-alert-title">¡Registro Exitoso!</p> 
+        <p><strong>Producto agregado correctamente.</strong></p>
+        </div>`);
+      form.reset();
+    } else {
+      alertMessages.insertAdjacentHTML(
+        "beforeend",
+        `<div class="alert alert-danger alert-error-glow">
+      <p class="custom-alert-title">Error: Producto Existente</p>
+      <p><strong>El producto ${productName.value} ya existe.</strong></p>
+      </div>`
+      );
     }
+  } else {
+    const listaCampos = errors.map(campo => {
+      const campoMayuscula = campo.charAt(0).toUpperCase() + campo.slice(1);
+      return `<li>${campoMayuscula}</li>`;
+    }).join("");
+
+    const mensajeHTML = `
+      <div class="alert alert-danger alert-error-glow">
+      <p class="custom-alert-title">¡Error de Validación!</p>
+      <p><strong>Los siguientes campos no son válidos:</strong></p>
+      <ul class="custom-alert-list">
+      ${listaCampos}
+      </ul>
+      </div>
+      `;
+    alertMessages.insertAdjacentHTML("beforeend", mensajeHTML);
+  }
+}
 createProductBtn.addEventListener("click", handleAddProductFlow);
 
 function handleAddProductFlow() {
@@ -165,3 +203,25 @@ fetch("../data/productos.json")
   .then((data) => {
     products = data;
   });
+// --- NUEVOS LISTENERS PARA VALIDACIÓN EN TIEMPO REAL ---
+
+const fieldsToValidate = [
+  { element: productName, reg: regs.name },
+  { element: productDescription, reg: regs.description },
+  { element: productPrice, reg: regs.price },
+  { element: productImage, reg: regs.url }
+];
+
+// 1. Listeners para validación basada en RegEx (Nombre, Descripción, Precio, URL)
+fieldsToValidate.forEach(({ element, reg }) => {
+  element.addEventListener("input", () => {
+    const isValid = reg.test(element.value);
+    applyGlowClass(element, isValid);
+  });
+});
+
+// 2. Listener especial para Categoría (Select/Dropdown)
+productCategory.addEventListener("change", () => {
+  const isValid = productCategory.value === "cafe" || productCategory.value === "pasteleria";
+  applyGlowClass(productCategory, isValid);
+});

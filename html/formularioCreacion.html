@@ -23,15 +23,16 @@
             <header id="encabezado"></header>
 
 
+            <header class="page-header text-center">
+                <div class="container">
+                    <h1 class="display-5">Creación de Nuevo Producto.</h1>
+                </div>
+            </header>
+
             <div class="container my-5">
                 <div class="row justify-content-center">
                     <div class="col-12 col-md-10 col-lg-8">
                         <div class="product-form-container">
-
-                            <header class="page-header text-center mb-4">
-                                <h1 class="display-5">Creación de Nuevo Producto.</h1>
-                                <p class="lead">Panel de Administración.</p>
-                            </header>
 
                             <form id="productForm">
 
@@ -44,7 +45,7 @@
                                     <div class="col-md-5">
                                         <label for="productCategory" class="form-label">Categoría:</label>
                                         <select class="form-select" id="productCategory" name="categoria" required>
-                                            <option value="" disabled selected>Selecciona una categoría</option>
+                                            <option value=" " disabled selected>Selecciona una categoría</option>
                                             <option value="cafe">Café</option>
                                             <option value="pasteleria">Repostería</option>
                                         </select>
@@ -82,11 +83,12 @@
                                         Crear Producto
                                     </button>
                                 </div>
+                                <div id="alert-messages" class="mt-4">
+                                </div>
                         </div>
                     </div>
                     </form>
-                    <div id="alert-messages" class="mt-4">
-                    </div>
+
 
                 </div>
             </div>
@@ -102,8 +104,8 @@
         crossorigin="anonymous"></script>
     <script src="../js/main.js"></script>
     <script src="../js/navBarAndFooter.js"></script>
+    <script src="../js/producto.js"></script>
     <script src="../js/formularioCreacion.js"></script>
-    <link rel="stylesheet" href="../css/main.css" />
 
 </body>
 

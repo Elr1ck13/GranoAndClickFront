@@ -166,7 +166,7 @@ input[type="date"].frminp::-webkit-calendar-picker-indicator {
 
 .frminp.input-invalid-glow {
   border: 0.12rem solid #ff4d4d !important;
-  box-shadow: 0 0 0.3125rem rgba(255, 77, 77, 0.7);
+  box-shadow: 0 0 0.5rem rgba(255, 77, 77, 5);
   transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
@@ -189,7 +189,7 @@ input[type="date"].frminp::-webkit-calendar-picker-indicator {
 
 .alert-error-glow {
   border: 0.063rem solid #ff4d4d !important;
-  box-shadow: 0 0 0.625rem rgba(255, 77, 77, 5), 0 0 0.3125rem rgba(255, 77, 77, 5) inset;
+  box-shadow: 0 0 0.8rem rgba(255, 77, 77, 5), 0 0 0.5rem rgba(255, 77, 77, 8) inset;
 }
 
 .alert-success-glow {
