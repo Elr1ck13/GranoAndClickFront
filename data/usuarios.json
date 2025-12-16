@@ -4,10 +4,12 @@
         "nombre": "Job",
         "apellido": "Ibarra",
         "correo": "job@correo.com",
-        "fechaNacimiento": "13-09-1998",
-        "direccion": "calle 07",
+        "fechaNacimiento": "13-08-1998",
+        "calleNumero": "calle 13",
+        "colonia": "colonia",
+        "municipio": "golden hill",
         "codigoPostal": "44004",
-        "telefono": "3320382976",
+        "telefono": "3322111320",
         "password": "Jobadr13=2"
     }
 ]
