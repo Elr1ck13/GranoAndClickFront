@@ -20,11 +20,11 @@ const alertMessages = document.getElementById("alert-messages");
 let errors = [];
 
 const regs = {
-  name: /^(?!.*[<>;\'\"\\\/])[A-Za-záéíóúñ]{3,}(?:[\s][A-Za-záéíóúñ]{2,}){0,98}$/,
-  email: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+  name: /^(?!.*[<>;\'\"\\\/])[A-Za-záéíóúñ]{3,}(?:[\s][A-Za-záéíóúñ]{2,}){0,70}$/,
+  email: /^(?=.{3,50}$)(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
   street: /^(?=.{3,100}$)(?!.*\s{2,})(?=.*\b\d{1,5}\b)[A-Za-zÁÉÍÓÚÜÑáéíóúüñ][A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9 .,'#\/\-°ª()]*$/,
-  neighborhood: /^(?=.{3,80}$)(?!.*\s{2,})(?=.*[A-Za-zÁÉÍÓÚÜÑáéíóúüñ])[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9][A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9 .,'\-]*$/,
-  county: /^(?=.{3,60}$)(?!.*\s{2,})[A-Za-zÁÉÍÓÚÜÑáéíóúüñ][A-Za-zÁÉÍÓÚÜÑáéíóúüñ .'\-]*$/,
+  neighborhood: /^(?=.{3,100}$)(?!.*\s{2,})(?=.*[A-Za-zÁÉÍÓÚÜÑáéíóúüñ])[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9][A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9 .,'\-]*$/,
+  county: /^(?=.{3,100}$)(?!.*\s{2,})[A-Za-zÁÉÍÓÚÜÑáéíóúüñ][A-Za-zÁÉÍÓÚÜÑáéíóúüñ .'\-]*$/,
   postalCode: /^(?!(?:00000|12345|23456|34567|45678|56789))(0[1-9]\d{3}|[1-9]\d{4})$/,
   phone: /^(?!0\d{2}|1\d{2}|2[0-1]\d|220)(?!(\d)\1{9}$)(?!0123456789$)(?!1234567890$)(?!9876543210$)(?!0101010101$)(?!(\d\d)\2{4}$)\d{10}$/,
   password: /^(?!.*(?:abc123|abcdef|abcd1234|123456|1234567|12345678|qwerty|asdfgh|zxcvbn|password|pass123|admin|usuario|welcome))(?!.*(.)\1\1)(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%&*()_\-+=])(?!.*\s)[A-Za-z\d@#$%&*()_\-+=]{8,12}$/
@@ -181,6 +181,7 @@ function createObjectUser() {
   const userId = `${newIdNum}`;
   const userModel = {
     "id": userId,
+    "rol": "user",
     "nombre": userName.value,
     "apellido": userLastName.value,
     "correo": (userEmail.value ?? "").toLowerCase().trim(),
@@ -216,7 +217,7 @@ function addUser() {
         alertMessages.insertAdjacentHTML(
           "beforeend",
           `<div class="alert alert-success alert-success-glow">
-          <p class="custom-alert-title">¡Registro Exitoso!</p> 
+          <p class="custom-alert-title">¡Registro Exitoso!</p>
           <p><strong>Usuario agregado correctamente. Serás redirigido al login.</strong></p>
           </div>`);
         form.reset();
@@ -239,7 +240,7 @@ function addUser() {
       alertMessages.insertAdjacentHTML(
         "beforeend",
         `<div class="alert alert-danger alert-error-glow">
-        <p class="custom-alert-title">Error de Conexión</p> 
+        <p class="custom-alert-title">Error de Conexión</p>
         <p><strong>Error al cargar datos o registrar: ${error.message}</strong></p>
         </div>`);
     });

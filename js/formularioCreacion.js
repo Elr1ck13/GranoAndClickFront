@@ -10,7 +10,7 @@ const productImage = document.getElementById("productImage");
 let errors = [];
 
 let regs = {
-  name: /^[A-Za-zÀ-ÿ0-9\s]{3,70}$/,
+  name: /^[A-Za-zÀ-ÿ0-9\s]{3,35}$/,
   description: /^(?=.{5,70}$)[A-Za-z0-9 ]{5,70}$/,
   price: /^(?!0)([1-9][0-9]{0,2}|[1-9]{1,2})(\.\d{1,2})?$/, //maximo 999
   url: /^(https?:\/\/)([a-zA-Z0-9.-]+)(:[0-9]{1,5})?(\/(?!.*\s).*\.(jpg|jpeg|png|webp|svg|JPG|JPEG|PNG||WEBP|SVG))$/
@@ -160,7 +160,7 @@ async function addProduct() {
       alertMessages.insertAdjacentHTML(
         "beforeend",
         `<div class="alert alert-success alert-success-glow">
-        <p class="custom-alert-title">¡Registro Exitoso!</p> 
+        <p class="custom-alert-title">¡Registro Exitoso!</p>
         <p><strong>Producto agregado correctamente.</strong></p>
         </div>`);
       form.reset();

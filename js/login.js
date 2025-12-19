@@ -37,7 +37,7 @@ function displayAlert(title, message, isSuccess = false) {
   const alertClass = isSuccess ? "alert-success-glow" : "alert-error-glow";
   const html = `
     <div class="alert ${isSuccess ? 'alert-success' : 'alert-danger'} ${alertClass}">
-      <p class="custom-alert-title">${title}</p> 
+      <p class="custom-alert-title">${title}</p>
       <p><strong>${message}</strong></p>
     </div>`;
   if (alertMessagesContainer) {
@@ -61,13 +61,13 @@ function validaPrevio() {
 
   const passValue = localPass.value.trim();
   const passOk = passValue.length > 0;
-  
+
   if (!passOk) {
     applyGlowClass(localPass, false);
   } else {
     applyGlowClass(localPass, true);
   }
-  
+
   veredict = veredict && passOk;
 
   return veredict;
@@ -82,19 +82,19 @@ function compararPassword() {
     return false;
   }
 
-  const usuarioEncontrado = usuarios.find(usuario => 
+  const usuarioEncontrado = usuarios.find(usuario =>
     usuario.correo === email && usuario.password === password
   );
 
   if (usuarioEncontrado) {
-    let rolAsignado = 'client';
+    /*let rolAsignado = 'client';
     if (usuarioEncontrado.id && usuarioEncontrado.id.startsWith('AD')) {
       rolAsignado = 'admin';
-    }
+    }*/
 
     localStorage.setItem('userToken', usuarioEncontrado.correo);
     localStorage.setItem('userId', usuarioEncontrado.id);
-    localStorage.setItem('userRole', rolAsignado);
+    localStorage.setItem('userRole', usuarioEncontrado.rol);
     localStorage.setItem('userName', usuarioEncontrado.nombre);
 
     displayAlert("Acceso Concedido", `Bienvenido ${usuarioEncontrado.nombre}.`, true);
@@ -133,14 +133,14 @@ function usuarioAceptado() {
 
 btnSend.addEventListener("click", function (event) {
   event.preventDefault();
-  cleanAlerts(); 
+  cleanAlerts();
 
   if (validaPrevio()) {
     if(compararPassword()){
       setTimeout(() => {
         usuarioAceptado();
         form.reset();
-      }, 500); 
+      }, 500);
     }
   } else {
     displayAlert("Error de Validación", "Por favor, completa correctamente los campos requeridos.");
@@ -149,7 +149,7 @@ btnSend.addEventListener("click", function (event) {
 
 localCorreo.addEventListener("input", () => {
   validateField(localCorreo, regs.email, "Correo");
-  applyGlowClass(localPass, localPass.value.trim().length > 0); 
+  applyGlowClass(localPass, localPass.value.trim().length > 0);
 });
 
 localPass.addEventListener("input", () => {
