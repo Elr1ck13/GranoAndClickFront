@@ -9,100 +9,41 @@ html {
   --mainFamilyFont: "Outfit", sans-serif;
 }
 
-body {
-  font-family: var(--mainFamilyFont);
-  background: linear-gradient(90deg, var(--secondaryColor) 0%, var(--bgColor) 100%);
-  min-height: 100vh;
-  color: var(--textColor);
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-#navBar,
-#navbar-nav a:visited,
-#navbar-nav a:hover,
-#navbar-nav a:active,
-#nav-link a {
-  height: 55px;
-  background-color: var(--bgColor);
-  color: #FFFFFF;
-  text-decoration: none;
-  border-radius: 2rem;
-  box-shadow: 0 0.3rem 0.5rem -0.12rem black;
-  font-family: var(--mainFamilyFont);
-}
-
-.navbar-toggler {
+.form-signin {
   background-color: var(--primaryColor);
-  border-radius: 50rem;
-}
-
-@media (max-width: 991.98px) {
-  .navbar {
-    position: relative;
-  }
-
-  #mainNavbarContent {
-    position: absolute;
-    top: 85%;
-    right: 0;
-    width: 10rem;
-    background-color: var(--primaryColor);
-    padding: 1rem;
-    border-radius: 1rem;
-    z-index: 1000;
-  }
-}
-
-.nav-link {
-  color: var(--textColor);
-  font-weight: 600;
-}
-
-.nav-link:hover {
-  color: var(--hgColor);
-  font-weight: 600;
-}
-
-#carrito,
-a#carrito {
-  background-color: var(--hgColor);
   border-radius: 0.5rem;
-  color: black;
-  box-shadow: 0 0.3rem 0.5rem -0.12rem black;
-}
-
-.form-login {
-  background-color: #011C40; 
-  border: none; 
-  border-radius: 1rem;
-  box-shadow: none; 
-  max-width: 20rem;
-  width: 100%;
-  height: auto;
-  padding: 2rem 2rem;
+  max-width: 30rem;
+  padding: 2rem;
+  margin-bottom: 5rem;
+  box-sizing: border-box;
+  color: var(--textColor);
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.3);
 }
 
 .frminp {
   border-radius: 0.4rem;
-  width: 15.5rem;
+  width: 100%;
   height: 2.3rem;
-  padding: 10px 15px;
-  background-color: #FFFFFF;
-  color: #011C40; 
+  padding: 0.625rem 0.938rem;
+  display: block;
+  outline: none;
+  transition: box-shadow 0.3s ease-in-out;
 }
 
 .frminp::placeholder {
-  color: #26658C; 
+  color: var(--bgColor);
 }
 
-.Btn {
+.frmlbl {
+  margin-bottom: 0.3rem;
+  display: block;
+}
+
+.Btn,
+.Btn2 {
   margin-top: 1rem;
   margin-bottom: 0.5rem;
-  width: 15.5rem;
+  width: 100%;
   height: 2.3rem;
   display: flex;
   align-items: center;
@@ -111,13 +52,18 @@ a#carrito {
   border: none;
   border-radius: 0.5rem;
   color: #011C40;
-  font-weight: 600;
-  gap: 8px;
+  font-weight: 38rem;
+  gap: 0.5rem;
   cursor: pointer;
-  box-shadow: none; 
   position: relative;
   overflow: hidden;
-  transition-duration: .3s;
+  transition: background-color 0.3s ease;
+}
+
+.Btn:hover,
+.Btn2:hover {
+  background-color: #FFE66D;
+  color: #011C40;
 }
 
 .svgIcon {
@@ -128,68 +74,117 @@ a#carrito {
   fill: #011C40;
 }
 
-.Btn::before {
-  width: 15.5rem;
-  height: 2.3rem;
-  position: absolute;
-  content: "";
-  background-color: #023859; 
+.frminp.input-invalid-glow {
+  border: 0.12rem solid #ff4d4d !important;
+  box-shadow: 0 0 0.5rem rgba(255, 77, 77, 5);
+  transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.frminp.input-valid-glow {
+  border: 0.12rem solid #66ff66 !important;
+  box-shadow: 0 0 0.3125rem rgba(102, 255, 102, 0.7);
+  transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+#alert-messages .alert {
+  background-color: rgba(1, 28, 64, 0.8);
+  color: var(--color-light);
   border-radius: 0.5rem;
-  left: -100%;
-  top: 0;
-  transition-duration: .3s;
-  mix-blend-mode: difference;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  border: none;
+  font-size: 1.1rem;
+  text-align: center;
 }
 
-.Btn:hover::before {
-  transition-duration: .3s;
-  transform: translate(100%, 0);
-  border-radius: 0.1rem;
+.alert-error-glow {
+  border: 0.063rem solid #ff4d4d !important;
+  box-shadow: 0 0 0.8rem rgba(255, 77, 77, 5), 0 0 0.5rem rgba(255, 77, 77, 8) inset;
 }
 
-@media (max-width: 390px) {
-  .Btn {
-    transition: none !important;
-    animation: none !important;
-    transform: none !important;
-  }
+.alert-success-glow {
+  border: 0.063rem solid #66ff66 !important;
+  box-shadow: 0 0 0.625rem rgba(102, 255, 102, 0.6), 0 0 0.3125rem rgba(102, 255, 102, 0.5) inset;
+}
 
-  .Btn::before {
-    transition: none !important;
-    transform: none !important;
-    left: 0 !important;
-    right: 0 !important;
-    background-color: transparent !important;
-  }
+.custom-alert-title {
+  color: var(--hgColor);
+  margin-bottom: 0.5rem;
+  font-size: 1.3rem;
+  font-weight: 43.75rem;
+}
 
-  .Btn:hover {
-    transform: none !important;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.103) !important;
-  }
+#alert-messages .alert p strong {
+  color: var(--hgColor);
+}
 
-  .Btn:hover::before {
-    transform: none !important;
-  }
+.frma {
+  color: var(--color-light);
+  text-decoration: none;
+  display: block;
+  text-align: center;
+}
 
-  .Btn:active {
-    transform: none !important;
-  }
+.frma:hover {
+  color: var(--hgColor);
 }
 
 @media (max-width: 768px) {
+
+  .main-content {
+    flex: 1;
+    padding-top: 0.5rem;
+    padding-bottom: 2rem;
+  }
+
+  .main-content h1 {
+    font-size: 2rem;
+    margin-top: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
   .form-signin {
-    height: auto;
-    padding: 1.5rem;
-    margin: 2rem;
+    max-width: 90%;
+    width: 90%;
+    padding: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 3rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.4);
   }
 
-  .form-signin .frminp {
-    width: 100%;
-    display: block;
+  .frmlbl {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    margin-top: 1rem;
   }
 
-  .Btn, .Btn2 {
-    width: 100%;
-    margin-bottom: 1rem;
+  .frminp {
+    height: 3rem;
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+  }
+
+  .Btn {
+    height: 3.2rem;
+    font-size: 1.1rem;
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+    border-radius: 0.75rem;
+  }
+
+  .frma {
+    font-size: 0.95rem;
+    margin-top: 0.7rem;
+  }
+
+  #alert-messages {
+    max-width: 90%;
+  }
+
+  .frminp.input-invalid-glow,
+  .frminp.input-valid-glow {
+    border-width: 0.18rem !important;
   }
 }

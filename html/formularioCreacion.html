@@ -22,13 +22,7 @@
             <!-- Navbar inyectado -->
             <header id="encabezado"></header>
 
-
-            <header class="page-header text-center">
-                <div class="container">
-                    <h1 class="display-5">Creación de Nuevo Producto.</h1>
-                    <p class="lead">Panel de Administración.</p>
-                </div>
-            </header>
+            <h1 class="form-title text-center mb-2 mt-3">Creación de nuevo producto.</h1>
 
             <div class="container my-5">
                 <div class="row justify-content-center">
@@ -45,8 +39,9 @@
                                     </div>
                                     <div class="col-md-5">
                                         <label for="productCategory" class="form-label">Categoría:</label>
-                                        <select class="form-select" id="productCategory" name="categoria" required>
-                                            <option value="" disabled selected>Selecciona una categoría</option>
+                                        <select class="form-select form-control" id="productCategory" name="categoria"
+                                            required>
+                                            <option value=" " disabled selected>Selecciona una categoría</option>
                                             <option value="cafe">Café</option>
                                             <option value="pasteleria">Repostería</option>
                                         </select>
@@ -84,11 +79,12 @@
                                         Crear Producto
                                     </button>
                                 </div>
+                                <div id="alert-messages" class="mt-4">
+                                </div>
                         </div>
                     </div>
                     </form>
-                    <div id="alert-messages" class="mt-4">
-                    </div>
+
 
                 </div>
             </div>
