@@ -12,7 +12,7 @@ let errors = [];
 let regs = {
   name: /^[A-Za-zÀ-ÿ0-9\s]{4,70}$/,
   description: /^(?=.{5,70}$)[A-Za-z0-9 ]{5,70}$/,
-  price: /^(?!0)([1-9][0-9]{0,2}|[1-9]{1,2})$/, //maximo 999
+  price: /^(?!0)([1-9][0-9]{0,2}|[1-9]{1,2})(\.\d{1,2})?$/, //maximo 999
   url: /^(https?:\/\/)([a-zA-Z0-9.-]+)(:[0-9]{1,5})?(\/(?!.*\s).*\.(jpg|jpeg|png|webp|svg|JPG|JPEG|PNG||WEBP|SVG))$/
 };
 function cleanAlert() {

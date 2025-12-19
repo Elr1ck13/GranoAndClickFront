@@ -138,7 +138,7 @@ function createCards(data) {
           <div class="card-body">
             <h5 class="card-title" id="nombre-${product.id}">${product.nombre}</h5>
             <p class="card-text">${product.descripcion}</p>
-            <p class="card-price" id="precio-${product.id}">$${product.precio} MXN</p>
+            <p class="card-price" id="precio-${product.id}">$${product.precio.toFixed(2)} MXN</p>
           </div>
 
           <div class="input-group product-quantity-control">
