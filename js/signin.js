@@ -90,7 +90,7 @@ function validateInfo() {
   let veredict = true;
   errors = [];
 
-   veredict = validateField(userName, regs.name, "Nombre") && veredict;
+  veredict = validateField(userName, regs.name, "Nombre") && veredict;
   veredict = validateField(userLastName, regs.name, "Apellido") && veredict;
   veredict = validateField(userEmail, regs.email, "Correo") && veredict;
   veredict = validateField(userPhone, regs.phone, "Teléfono") && veredict;
@@ -98,28 +98,32 @@ function validateInfo() {
   veredict = validateField(userNeighborhood, regs.neighborhood, "Colonia") && veredict;
   veredict = validateField(userCounty, regs.county, "Municipio") && veredict;
   veredict = validateField(userPostalCode, regs.postalCode, "Código Postal") && veredict;
-  veredict = validateField(userPassword, regs.password, "Contraseña") && veredict;
 
-    if (!userBirthDate.value) {
+  if (!userBirthDate.value) {
     applyGlowClass(userBirthDate, false);
     errors.push("Fecha de Nacimiento (Requerida)");
     veredict = false;
   } else if (!isAdult(userBirthDate.value)) {
     applyGlowClass(userBirthDate, false);
-    errors.push("Fecha de Nacimiento (Debes ser mayor de 18)");
+    errors.push("Fecha de Nacimiento (Aceptamos únicamente personas de 18 hasta 100 años)");
     veredict = false;
   } else {
     applyGlowClass(userBirthDate, true);
   }
 
-  
-  if (userConfirmPassword.value.trim() === "") {
-    applyGlowClass(userConfirmPassword, false);
-    errors.push("Confirmar Contraseña (Requerida)");
+  const passIsValid = regs.password.test(userPassword.value);
+  if (!passIsValid) {
+    applyGlowClass(userPassword, false);
+    const missingRequirements = getPasswordErrors(userPassword.value);
+    errors.push(`Contraseña (Falta: ${missingRequirements.join(", ")})`);
     veredict = false;
-  } else if (userConfirmPassword.value !== userPassword.value) {
+  } else {
+    applyGlowClass(userPassword, true);
+  }
+
+  if (userConfirmPassword.value !== userPassword.value || userConfirmPassword.value === "") {
     applyGlowClass(userConfirmPassword, false);
-    errors.push("Contraseñas no coinciden");
+    errors.push("Confirmar Contraseña (Las contraseñas no coinciden)");
     veredict = false;
   } else {
     applyGlowClass(userConfirmPassword, true);
@@ -138,6 +142,20 @@ function validateInfo() {
   }
 
   return veredict;
+}
+function getPasswordErrors(pass) {
+  let missing = [];
+  if (pass.length < 8 || pass.length > 12) missing.push("poner de 8 a 12 caracteres");
+  if (!/[A-Z]/.test(pass)) missing.push("poner mayúsculas");
+  if (!/[a-z]/.test(pass)) missing.push("poner minúsculas");
+  if (!/\d/.test(pass)) missing.push("poner al menos un número");
+  if (!/[@#$%&*()_\-+=]/.test(pass)) missing.push("poner al menos un carácter especial (@#$%&*()_-+=)");
+  if (/\s/.test(pass)) missing.push("sin espacios");
+
+  const forbidden = /abc123|abcdef|abcd1234|123456|1234567|12345678|qwerty|asdfgh|zxcvbn|password|pass123|admin|usuario|welcome/i;
+  if (forbidden.test(pass)) missing.push("no debe usar palabras comunes (como 'admin' o '123456')");
+
+  return missing;
 }
 
 function userExist(email, userList) {
@@ -186,7 +204,7 @@ function saveUserInLocalStorage(user) {
 function addUser() {
   cleanErrors();
 
-  fetch("../data/usuarios.json") 
+  fetch("../data/usuarios.json")
     .then((res) => res.json())
     .then((data) => {
       users = data;
