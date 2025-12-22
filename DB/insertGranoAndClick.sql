@@ -79,6 +79,20 @@ INSERT INTO carrito (usuario_id, costo_envio,total) VALUES (4, 55.00,192.00);
 INSERT INTO carrito (usuario_id, costo_envio,total) VALUES (5, 65.00,162.00);
 INSERT INTO carrito (usuario_id, costo_envio,total) VALUES (4, 20.00,177.00);
 
-INSERT INTO carrito_detalle values (null,carrito_id,producto_id,cantidad,subtotal);
-INSERT INTO pedido_detalle values (null,pedido_id,producto_id,cantidad,precio_unitario);
-INSERT INTO pedidos values (null,usuario_id,fecha_pedido,estado,costo_envio,total);
+INSERT INTO carrito_detalle values (null,1,1,5,225);
+INSERT INTO carrito_detalle values (null,2,5,7,525);
+INSERT INTO carrito_detalle values (null,3,4,3,246);
+INSERT INTO carrito_detalle values (null,4,6,6,420);
+INSERT INTO carrito_detalle values (null,5,3,1,45);
+
+INSERT INTO pedidos values (null,3,"2025-10-15","Recibido",25.20,200.61);
+INSERT INTO pedidos values (null,4,"2025-08-20","Pagado",30.75,180.16);
+INSERT INTO pedidos values (null,5,"2025-07-14","Entregado",15.15,150.56);
+INSERT INTO pedidos values (null,3,"2025-12-07","Cancelado",85.45,300.15);
+INSERT INTO pedidos values (null,5,"2025-11-22","Recibido",55.15,145.75);
+
+INSERT INTO pedido_detalle values (null,2,3,3,82);
+INSERT INTO pedido_detalle values (null,1,6,2,70);
+INSERT INTO pedido_detalle values (null,3,2,5,45);
+INSERT INTO pedido_detalle values (null,4,4,5,82);
+INSERT INTO pedido_detalle values (null,5,8,4,45);
