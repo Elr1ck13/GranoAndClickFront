@@ -2,23 +2,23 @@ CREATE DATABASE IF NOT EXISTS grano_click;
 
 USE grano_click;
 
--- Tabla: tipos_usuario
-
+-- Tabla: nosotros
 CREATE  TABLE IF NOT EXISTS nosotros(
 	nosotros_id INT AUTO_INCREMENT PRIMARY KEY,
 	nombre VARCHAR(30),
 	photo VARCHAR(255),
-    rol VARCHAR(20),
+    rol VARCHAR(60),
     biografia VARCHAR(430)
 );
 
-ALTER TABLE nosotros MODIFY rol VARCHAR(40);
+-- Tabla: tipos_usuario
 
 CREATE TABLE IF NOT EXISTS tipos_usuario (
     tipo_usuario_id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
     descripcion VARCHAR(150)
 );
+
 
 -- Tabla: usuarios
 
@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     correo_electronico VARCHAR(100) NOT NULL,
     telefono VARCHAR(10),
     fecha_nacimiento DATE,
+    calle_numero VARCHAR(70) NOT NULL,
     municipio VARCHAR(100),
     colonia VARCHAR(100),
     codigo_postal VARCHAR(5),
@@ -59,15 +60,6 @@ CREATE INDEX idx_producto_nombre
 ON productos (nombre);
 
 -- Tabla: carrito
-
-
-CREATE TABLE IF NOT EXISTS carrito (
-    carrito_id INT AUTO_INCREMENT PRIMARY KEY,
-    usuario_id INT NOT NULL,
-    costo_envio DECIMAL(5,2) NOT NULL,
-    fecha_agregado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(usuario_id)
-);
 
 CREATE TABLE IF NOT EXISTS carrito (
     carrito_id INT AUTO_INCREMENT PRIMARY KEY,
