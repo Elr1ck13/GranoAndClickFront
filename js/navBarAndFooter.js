@@ -127,7 +127,6 @@ function avisoPrivacidad() {
 
 
 function buildNavBar(page) {
-  console.log("PAGE:", page, "ID:", page?.id);
   let iconPath = getIconPath(page, "LogoBien.png");
   let indexPage = getPagePaths(page, "index.html");
   let usPage = getPagePaths(page, "sobreNosotros.html");
