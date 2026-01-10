@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Iniciar sesión</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="icon" href="../assets/IconoLogo.png">
+</head>
+
+<body>
+    <div id="PagoHere">
+        <header id="encabezado"></header>
+
+        <div class="container">
+            <h1>Pago</h1>
+            <p>Su total a pagar es de <div id="total"> MXN</div></p>
+            <form>
+                <label for="nombre">Nombres y apellidos del dueño de la tarjeta:</label>
+                <input type="text" id="nombre" class="campos" required>
+
+                <label for="numeroTarjeta">Número de tarjeta:</label>
+                <input type="tel" id="numeroTarjeta" class="campos" maxlength="10" required>
+
+                <label for="ccv">CCV:</label>
+                <input type="tel" id="ccv" class="campos" maxlength="3" required>
+
+                <label for="mesVencimiento">Fecha de vencimiento:</label>
+                <input type="tel" id="mesVencimiento" class="campos" maxlength="2" required>
+                
+                <label for="yearVencimiento">/</label>
+                <input type="tel" id="yearVencimiento" class="campos" maxlength="2" required>
+                
+
+                <label for="correo">Correo:</label>
+                <input type="email" id="correo" class="campos"  required>
+
+                <button type="submit" id="pagar">Pagar</button>
+            </form>
+                    <div id="alert-messages" class="mt-4"></div>
+
+        </div>
+
+    </div>
+
+
+    <div id="footer-container"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/navBarAndFooter.js"></script>
+    <script src="../js/pago.js"></script>
+
+</body>
+
+</html>
