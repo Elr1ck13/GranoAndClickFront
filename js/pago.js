@@ -118,7 +118,7 @@ pagar.addEventListener("click", function (event) {
           <p><strong>Gracias por tu compra</strong></p>
           </div>`
     );
-    form.reset();
+   document.querySelector("form").reset();
   } else {
     showErrors();
   }

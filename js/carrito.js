@@ -60,7 +60,7 @@ window.addEventListener("load", function () {
   tabla = $("#tablaCarrito").DataTable({
     language: {
             emptyTable: "No hay productos elegidos",
-            info: "Mostrando _START_ a _END_ de _TOTAL_ productos elegidos",
+            info: "No hay cambios ni devoluciones.",
             infoEmpty: "Mostrando 0 de 0 productos elegidos"
 
         },
