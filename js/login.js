@@ -3,7 +3,6 @@ const localCorreo = document.getElementById("emails");
 const localPass = document.getElementById("pass");
 const btnSend = document.getElementById("send");
 const alertMessagesContainer = document.getElementById("alert-messages");
-let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
 
 const regs = {
   email:
@@ -112,24 +111,6 @@ async function loginBackend() {
   }
 }
 
-function loadAdmins() {
-  fetch("../data/usuarios.json")
-    .then((res) => res.json())
-    .then((data) => {
-      if (Array.isArray(data) && data.length > 0) {
-        const nuevosUsuarios = data.filter(
-          (admin) => !usuarios.some((u) => u.id === admin.id)
-        );
-        usuarios.push(...nuevosUsuarios);
-        localStorage.setItem("usuarios", JSON.stringify(usuarios));
-        usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
-      }
-    })
-    .catch((error) => {
-      console.log("Error al cargar administradores iniciales:", error.message);
-    });
-}
-
 function usuarioAceptado() {
   window.location.href = "../html/productos.html";
 }
@@ -163,8 +144,4 @@ localCorreo.addEventListener("input", () => {
 localPass.addEventListener("input", () => {
   const isValid = localPass.value.trim().length > 0;
   applyGlowClass(localPass, isValid);
-});
-
-window.addEventListener("load", function (event) {
-  if (usuarios.length === 0) loadAdmins();
 });
