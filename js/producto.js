@@ -227,7 +227,7 @@ async function cargarProductosLocales() {
     if (cardsPostre) {
       cardsPostre.insertAdjacentHTML("beforeend", createCards(postreLocales));
     }
-    cargarCantidadLS()
+    cargarCantidadLS();
   } catch (error) {}
 }
 
@@ -257,7 +257,7 @@ function cambiarLista(nombre, precio, cantidad) {
     }
   }
   if (!encontrado) {
-    let nuevoProducto = Object.keys(listaDeCompras).length + 1; 
+    let nuevoProducto = Object.keys(listaDeCompras).length + 1;
     listaDeCompras[nuevoProducto] = {
       nombre: nombre,
       precio: precio,
@@ -268,7 +268,7 @@ function cambiarLista(nombre, precio, cantidad) {
   localStorage.setItem("products", JSON.stringify(listaDeCompras));
 }
 
-function cargarCantidadLS (){
+function cargarCantidadLS() {
   const productsPrevio = JSON.parse(localStorage.getItem("products")) || {};
   const products = Array.isArray(productsPrevio)
     ? productsPrevio
@@ -323,8 +323,6 @@ document.addEventListener("click", (e) => {
     inpBuscar.addEventListener("input", recuperarTarjetas);
   }
 });
-
-//Lógica de Deep Link Scroll
 
 function handleDeepLinkScroll() {
   const hash = window.location.hash;
