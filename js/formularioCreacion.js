@@ -112,20 +112,52 @@ function validarImagen(url) {
   });
 }
 
-function crearObjetoProducto(finalPhotoUrl) {
-  const category = productCategory.value;
-  const nuevoIdNum = Math.floor(Date.now() / 1000);
-  const productId = `${category}_${nuevoIdNum}`;
+async function crearObjetoProducto(finalPhotoUrl) {
+  const token = localStorage.getItem("token");
+  const cat = productCategory.value;
+  const prefijo = cat === "cafe" ? "cafe" : "past";
 
-  const productoModel = {
-    "id": productId,
-    "nombre": productName.value,
-    "categoria": category,
-    "descripcion": productDescription.value,
-    "precio": parseFloat(productPrice.value),
-    "foto": finalPhotoUrl
-  };
-  guardarProductoEnLocalStorage(productoModel);
+  try {
+    const res = await fetch("http://localhost:8080/api/productos");
+    const allProducts = await res.json();
+    const productosCategoria = allProducts.filter(p => p.categoria === cat);
+
+    let nuevoNumero = 1;
+    if (productosCategoria.length > 0) {
+      const numeros = productosCategoria.map(p => {
+        const partes = p.subindice.split('_');
+        return parseInt(partes[1]) || 0;
+      });
+      nuevoNumero = Math.max(...numeros) + 1;
+    }
+    const subindiceGenerado = `${prefijo}_${nuevoNumero.toString().padStart(3, '0')}`;
+
+    const productoDTO = {
+      subindice: subindiceGenerado,
+      categoria: cat,
+      nombre: productName.value,
+      descripcion: productDescription.value,
+      precio: parseFloat(productPrice.value),
+      imagen_url: finalPhotoUrl,
+      activo: true
+    };
+
+    const response = await fetch("http://localhost:8080/api/productos", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify(productoDTO)
+    });
+
+    // RETORNAMOS TRUE SI SE GUARDÓ, FALSE SI NO
+    return response.ok;
+
+  } catch (error) {
+    console.error("Error de red:", error);
+    return false;
+  }
 }
 
 function guardarProductoEnLocalStorage(producto) {
@@ -135,7 +167,7 @@ function guardarProductoEnLocalStorage(producto) {
 }
 
 async function addProduct() {
-  const res = await fetch("../data/productos.json");
+  const res = await fetch("http://localhost:8080/api/productos");
   const data = await res.json();
   products = data;
 
@@ -144,6 +176,7 @@ async function addProduct() {
       cleanErrors();
       const urlIngresada = productImage.value;
       const urlValidada = await validarImagen(urlIngresada);
+
       if (urlValidada !== urlIngresada) {
         alertMessages.insertAdjacentHTML(
           "beforeend",
@@ -155,15 +188,26 @@ async function addProduct() {
       } else {
         applyGlowClass(productImage, true);
       }
-      crearObjetoProducto(urlValidada);
 
-      alertMessages.insertAdjacentHTML(
-        "beforeend",
-        `<div class="alert alert-success alert-success-glow">
+      const guardadoExitoso = await crearObjetoProducto(urlValidada);
+
+      if (guardadoExitoso) {
+        alertMessages.insertAdjacentHTML(
+          "beforeend",
+          `<div class="alert alert-success alert-success-glow">
         <p class="custom-alert-title">¡Registro Exitoso!</p>
         <p><strong>Producto agregado correctamente.</strong></p>
         </div>`);
-      form.reset();
+        form.reset();
+        setTimeout(cleanErrors, 2000);
+      } else {
+        alertMessages.insertAdjacentHTML(
+          "beforeend",
+          `<div class="alert alert-danger alert-error-glow">
+                    <p class="custom-alert-title">Error de Servidor</p>
+                    <p>No se pudo conectar con la base de datos o el token expiró.</p>
+                    </div>`);
+      }
     } else {
       alertMessages.insertAdjacentHTML(
         "beforeend",
@@ -198,7 +242,7 @@ function handleAddProductFlow() {
   addProduct();
 }
 
-fetch("../data/productos.json")
+fetch("http://localhost:8080/api/productos")
   .then((res) => res.json())
   .then((data) => {
     products = data;
