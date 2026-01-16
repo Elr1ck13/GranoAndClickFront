@@ -1,4 +1,4 @@
-let users = [];
+import { API_URLS } from "./urls.js";
 
 const form = document.getElementById("signinForm");
 const userName = document.getElementById("userName");
@@ -221,7 +221,7 @@ async function registerUserBackend() {
   };
 
   try {
-    const res = await fetch("http://localhost:8080/api/usuarios", {
+    const res = await fetch(API_URLS.usuarios, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
