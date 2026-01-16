@@ -10,6 +10,7 @@ function borrarProducto(id) {
   localStorage.setItem("products", JSON.stringify(productos));
   cargarProductos();
 }
+
 function cargarProductos() {
   // 1. Validar que la tabla de DataTables esté inicializada
   if (!tabla) return;

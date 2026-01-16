@@ -1,9 +1,12 @@
+import { API_URLS } from './urls.js';
 let name = document.getElementById("nombre");
 let email = document.getElementById("correo");
 let phone = document.getElementById("telefono");
 let msg = document.getElementById("mensaje");
 let send = document.getElementById("enviar");
 let respuesta = document.getElementById("respuesta");
+
+
 
 let regs = {
   name: /^(?!.*[<>;\'\"\\\/])[A-Za-záéíóúñ]{3,}(?:[\s][A-Za-záéíóúñ]{2,}){0,98}$/,
@@ -146,9 +149,9 @@ send.addEventListener("click", function (event) {
 
   respuesta.innerHTML = '';
   if (resultados[0]) {
-    enviarCorreo();
+    //enviarCorreo();
+    guardar();
     form.reset();
-    console.log("exito");
     camposConReglas.forEach(({ input }) => {
       input.classList.remove("input-invalid-glow", "input-valid-glow");
       input.style.border = "";
@@ -157,3 +160,27 @@ send.addEventListener("click", function (event) {
     mostrarErrores(resultados, respuesta);
   }
 });
+
+async  function guardar(){
+  console.log("hola");
+const bodyData = {
+  nombre: document.getElementById("nombre").value,
+  correo: email.value,
+  telefono: phone.value,
+  mensaje: msg.value
+};
+
+const options = {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(bodyData)
+};
+
+try {
+  const response = await fetch(API_URLS.contactos, options);
+  const data = await response.json();
+  console.log(data);
+} catch (error) {
+  console.error(error);
+}
+}

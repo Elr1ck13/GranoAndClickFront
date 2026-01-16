@@ -4,6 +4,7 @@ const nuevaContra = document.getElementById("nuevaContra");
 const repetirNueva = document.getElementById("repetirNueva");
 const btnActualizar = form.querySelector(".Btn"); // Seleccionar el botón "Actualizar"
 const alertMessagesContainer = document.getElementById("alert-messages"); // Nuevo: Contenedor de mensajes
+const telefonoRecupera = document.getElementById("telefonoRecupera");
 const STORAGE_KEY = "usuarios";
 
 function cleanAlerts() {
@@ -29,6 +30,7 @@ function clearGlows() {
     applyGlowClass(correoRecupera, true);
     applyGlowClass(nuevaContra, true);
     applyGlowClass(repetirNueva, true);
+    applyGlowClass(telefonoRecupera, true);
 }
 
 function displayAlert(title, message, isSuccess = false) {
@@ -68,6 +70,7 @@ function setUsuarios(usuarios) {
 const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const regexContrasena =
   /^(?!.*(?:abc123|abcdef|abcd1234|123456|1234567|12345678|qwerty|asdfgh|zxcvbn|password|pass123|admin|usuario|welcome))(?!.*(.)\1\1)(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%&*()_\-+=])(?!.*\s)[A-Za-z\d@#$%&*()_\-+=]{8,12}$/;
+const regexTelefono = /^\d{10}$/;
 
 function validarCorreo(correo) {
   return regexCorreo.test(correo);
@@ -75,6 +78,10 @@ function validarCorreo(correo) {
 
 function validarContrasena(password) {
   return regexContrasena.test(password);
+}
+
+function validarTelefono(telefono) {
+  return regexTelefono.test(telefono);
 }
 
 btnActualizar.addEventListener("click", function (e) {
@@ -85,14 +92,17 @@ btnActualizar.addEventListener("click", function (e) {
   const correo = correoRecupera.value.trim();
   const nueva = nuevaContra.value;
   const repetir = repetirNueva.value;
+  const telefono = telefonoRecupera.value.trim();
+
 
   let validationPassed = true;
 
-  if (!correo || !nueva || !repetir) {
+  if (!correo || !nueva || !repetir || !telefono) {
     displayAlert("Campos Obligatorios", "Por favor, completa todos los campos.");
     if (!correo) applyGlowClass(correoRecupera, false);
     if (!nueva) applyGlowClass(nuevaContra, false);
     if (!repetir) applyGlowClass(repetirNueva, false);
+    if (!telefono) applyGlowClass(telefonoRecupera, false);
     return;
   }
 
@@ -111,6 +121,14 @@ btnActualizar.addEventListener("click", function (e) {
     return;
   }
 
+  if (!validarTelefono(telefono)) {
+    applyGlowClass(telefonoRecupera, false);
+    displayAlert(
+      "Teléfono inválido",
+      "El teléfono debe tener exactamente 10 dígitos."
+    );
+    return;
+  }
 
   if (!validarContrasena(nueva)) {
     applyGlowClass(nuevaContra, false);
@@ -164,3 +182,44 @@ repetirNueva.addEventListener("input", () => {
     const repeticionOk = repetirNueva.value === nuevaContra.value;
     applyGlowClass(repetirNueva, repeticionOk);
 });
+
+telefonoRecupera.addEventListener("input", () => {
+  telefonoRecupera.value = telefonoRecupera.value.replace(/\D/g, "");
+  applyGlowClass(telefonoRecupera, validarTelefono(telefonoRecupera.value));
+});
+
+async function mostrarAlertaRecuperar() {
+    const { value: formValues } = await Swal.fire({
+        title: 'Recuperar Contraseña',
+        html:
+            '<input id="swal-correo" class="swal2-input" placeholder="Correo electrónico">' +
+            '<input id="swal-telefono" class="swal2-input" placeholder="Teléfono registrado">' +
+            '<input id="swal-pass" type="password" class="swal2-input" placeholder="Nueva contraseña">',
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Actualizar',
+        preConfirm: () => {
+            return {
+                correo: document.getElementById('swal-correo').value,
+                telefono: document.getElementById('swal-telefono').value,
+                nuevaContrasena: document.getElementById('swal-pass').value
+            }
+        }
+    });
+
+    if (formValues) {
+        fetch('http://localhost:8080/api/usuarios/recuperar-password', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formValues)
+        })
+        .then(response => {
+            if (response.ok) {
+                Swal.fire('¡Éxito!', 'Tu contraseña ha sido actualizada', 'success');
+            } else {
+                Swal.fire('Error', 'El correo o el teléfono no coinciden', 'error');
+            }
+        })
+        .catch(error => Swal.fire('Error', 'No se pudo conectar con el servidor', 'error'));
+    }
+}
