@@ -1,3 +1,4 @@
+import { API_URLS } from './urls.js';
 let products = [];
 const productName = document.getElementById("productName");
 const productCategory = document.getElementById("productCategory");
@@ -118,7 +119,7 @@ async function crearObjetoProducto(finalPhotoUrl) {
   const prefijo = cat === "cafe" ? "cafe" : "past";
 
   try {
-    const res = await fetch("http://localhost:8080/api/productos");
+    const res = await fetch(API_URLS.productos);
     const allProducts = await res.json();
     const productosCategoria = allProducts.filter(p => p.categoria === cat);
 
@@ -142,7 +143,7 @@ async function crearObjetoProducto(finalPhotoUrl) {
       activo: true
     };
 
-    const response = await fetch("http://localhost:8080/api/productos", {
+    const response = await fetch(API_URLS.productos, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -167,7 +168,7 @@ function guardarProductoEnLocalStorage(producto) {
 }
 
 async function addProduct() {
-  const res = await fetch("http://localhost:8080/api/productos");
+  const res = await fetch(API_URLS.productos);
   const data = await res.json();
   products = data;
 
@@ -242,7 +243,7 @@ function handleAddProductFlow() {
   addProduct();
 }
 
-fetch("http://localhost:8080/api/productos")
+fetch(API_URLS.productos)
   .then((res) => res.json())
   .then((data) => {
     products = data;

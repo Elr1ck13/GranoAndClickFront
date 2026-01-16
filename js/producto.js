@@ -1,3 +1,4 @@
+import { API_URLS } from './urls.js';
 const cards_cafe = document.getElementById("cards_cafe");
 let cafeData = [];
 const cardsPostre = document.getElementById("cardsPostre");
@@ -82,21 +83,18 @@ function validarImagen(url) {
 async function getProductos() {
   try {
     // 1. Apuntamos a tu controlador de Spring Boot
-    const res = await fetch("http://localhost:8080/api/productos");
+    const res = await fetch(API_URLS.productos);
     if (!res.ok) throw new Error("Error al obtener datos de la base de datos");
 
-    const data = await res.json(); // Aquí recibimos la lista de Producto.java
+    const data = await res.json();
 
-    // 2. Adaptamos los datos: Java usa 'imagen_url', JS espera 'foto'
     const productosAdaptados = await Promise.all(
       data.map(async (item) => {
-        // Validamos la imagen usando tu función existente
         const imagenValida = await validarImagen(item.imagen_url);
 
         return {
           ...item,
-          foto: imagenValida, // Creamos la propiedad 'foto' que usa tu createCards
-          // Forzamos minúsculas para que el filter funcione siempre (cafe, pasteleria)
+          foto: imagenValida,
           categoria: item.categoria.toLowerCase(),
         };
       })
@@ -105,7 +103,7 @@ async function getProductos() {
     // 3. Filtrado y renderizado (Cafe)
     cafeData = productosAdaptados.filter((item) => item.categoria === "cafe");
     if (cards_cafe) {
-      cards_cafe.innerHTML = ""; // Limpiar contenido previo si fuera necesario
+      cards_cafe.innerHTML = ""; 
       cards_cafe.insertAdjacentHTML("beforeend", createCards(cafeData));
     }
 

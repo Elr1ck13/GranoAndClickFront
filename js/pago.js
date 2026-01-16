@@ -1,3 +1,4 @@
+import { API_URLS } from './urls.js';
 let nombre = document.getElementById("nombre");
 let numeroTarjeta = document.getElementById("numeroTarjeta");
 let ccv = document.getElementById("ccv");
@@ -149,7 +150,7 @@ pagar.addEventListener("click", function (event) {
         return;
     }
     try {
-      const response = await fetch("http://localhost:8080/api/pedidos", {
+      const response = await fetch(API_URLS.pedidos, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -198,7 +199,7 @@ async function realizarCompra() {
         }))
     };
 
-    const response = await fetch("http://localhost:8080/api/pedidos", {
+    const response = await fetch(API_URLS.pedidos, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
