@@ -7,6 +7,9 @@ let correo = document.getElementById("correo");
 let pagar = document.getElementById("pagar");
 let mostrarTotal = document.getElementById("total");
 let campos = document.getElementsByClassName("campos");
+const btnAtras = document.getElementById("btnAtras");
+const btnCancelar = document.getElementById("btnCancelar");
+let compraExitosa = false;
 const alertMessages = document.getElementById("alert-messages");
 
 let errors = [];
@@ -111,17 +114,127 @@ pagar.addEventListener("click", function (event) {
   event.preventDefault();
   cleanErrors();
   if (validateInfo()) {
-    alertMessages.insertAdjacentHTML(
-      "beforeend",
-      `<div class="alert alert-success alert-success-glow">
-          <p class="custom-alert-title">¡Monto pagado correctamente!</p>
-          <p><strong>Gracias por tu compra</strong></p>
-          </div>`
-    );
-   document.querySelector("form").reset();
-  } else {
-    showErrors();
+    const carrito = JSON.parse(localStorage.getItem("products")) || {};
+    const total = localStorage.getItem("TotalGeneral") || "0";
+    const token = localStorage.getItem("authToken");
+    const detallesArray = Object.values(carrito).map(item => ({
+    productoId: item.id,
+    cantidad: item.cantidad || 1,
+    precioUnitario: parseFloat(String(item.precio).replace(/[^0-9.]/g, "")),
+    subtotal: parseFloat(String(item.precio).replace(/[^0-9.]/g, "")) * (item.cantidad || 1)
+}));
+
+    const pedidoDTO = {
+    total: parseFloat(total),
+    costoEnvio: 0.00,
+    detalles: Object.values(carrito).map(item => {
+        // Limpiamos el precio de cualquier símbolo para que el Java reciba un número puro
+        const precioLimpio = parseFloat(String(item.precio).replace(/[^0-9.]/g, ""));
+        return {
+            productoId: item.id,
+            cantidad: item.cantidad || 1,
+            precioUnitario: precioLimpio,
+            subtotal: precioLimpio * (item.cantidad || 1)
+        };
+    })
+};
+    enviarPedidoAlBackend(pedidoDTO, token);
   }
+
+
+  async function enviarPedidoAlBackend(dto, token) {
+    if (!token) {
+        alert("Debes iniciar sesión para completar tu compra.");
+        window.location.href = "login.html";
+        return;
+    }
+    try {
+      const response = await fetch("http://localhost:8080/api/pedidos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(dto)
+      });
+
+if (response.ok) {
+            compraExitosa = true;
+
+        alertMessages.insertAdjacentHTML(
+          "beforeend",
+          `<div class="alert alert-success alert-success-glow">
+          <p class="custom-alert-title">¡Compra Exitosa!</p>
+          <p>Tu pedido ha sido registrado correctamente.</p>
+          <p><strong>Gracias por tu compra</strong></p>
+          </div>`);
+        localStorage.removeItem("products");
+        localStorage.removeItem("TotalGeneral");
+        setTimeout(() => window.location.href = "finalizado.html", 2500);
+      } else {
+        throw new Error("Error en el servidor");
+      }
+    } catch (error) {
+      console.error("Error al procesar pedido:", error);
+    }
+  }
+});
+
+// En tu función de pago.js
+async function realizarCompra() {
+    const token = localStorage.getItem("authToken");
+    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    const totalLocal = localStorage.getItem("TotalGeneral") || "0";
+
+    const pedidoDTO = {
+        costoEnvio: 0.00,
+        total: parseFloat(totalLocal),
+        // Solo enviamos los detalles, el usuario lo pone el Backend
+        detalles: carrito.map(item => ({
+            productoId: item.id,
+            cantidad: item.cantidad,
+            precioUnitario: item.precio
+            // El subtotal lo calcula el backend o el DTO
+        }))
+    };
+
+    const response = await fetch("http://localhost:8080/api/pedidos", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(pedidoDTO)
+    });
+
+    if (response.ok) {
+        displayAlert("¡Compra Exitosa!", "Tu pedido está siendo preparado.", true);
+        localStorage.removeItem("carrito");
+        localStorage.removeItem("TotalGeneral");
+    }
+}
+
+btnAtras.addEventListener("click", function() {
+    if (compraExitosa) {
+        // Si ya pagó, no hay carrito que ver, va al inicio
+        window.location.href = "../index.html";
+    } else {
+        // Si no ha pagado, regresa al carrito con sus productos intactos
+        window.location.href = "./carrito.html";
+    }
+});
+
+// --- BOTÓN CANCELAR ---
+btnCancelar.addEventListener("click", function() {
+    // Confirmación para evitar accidentes
+    const confirmar = confirm("¿Estás seguro de cancelar? Se vaciará tu carrito y volverás al inicio.");
+    if (confirmar) {
+        // Borramos los productos y el total
+        localStorage.removeItem("products");
+        localStorage.removeItem("TotalGeneral");
+        // Redirigimos al inicio
+        window.location.href = "../index.html";
+    }
 });
 
 window.addEventListener("load", function () {
@@ -131,11 +244,11 @@ window.addEventListener("load", function () {
       : "0";
   mostrarTotal.insertAdjacentText(
     "afterbegin",
-    `${Number(total).toFixed(2) }`);
+    `${Number(total).toFixed(2)}`);
 });
 
-  window.addEventListener("beforeunload", function (event) {
-    event.preventDefault();
-    event.returnValue = "";
-  });
+window.addEventListener("beforeunload", function (event) {
+  event.preventDefault();
+  event.returnValue = "";
+});
 

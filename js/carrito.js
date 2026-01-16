@@ -11,34 +11,56 @@ function borrarProducto(id) {
   cargarProductos();
 }
 function cargarProductos() {
+  // 1. Validar que la tabla de DataTables esté inicializada
+  if (!tabla) return;
+
   let productos = JSON.parse(localStorage.getItem("products")) || {};
+
+  // 2. Limpiar filas existentes
   tabla.clear();
 
   let totalGeneral = 0;
 
-  Object.keys(productos).forEach((key) => {
-    let producto = productos[key];
-    let precioNum = parseFloat(producto.precio.replace(/[^0-9.]/g, ""));
-    let total = precioNum * producto.cantidad;
+  // 3. Usar Object.entries es más limpio para obtener [llave, valor]
+  Object.entries(productos).forEach(([key, producto]) => {
+    // Validación de seguridad para el objeto producto
+    if (!producto || !producto.precio) return;
 
+    let precioTexto = String(producto.precio);
+    let precioNum = parseFloat(precioTexto.replace(/[^0-9.]/g, ""));
+
+
+    let total = precioNum * (producto.cantidad || 1);
     totalGeneral += total;
 
     tabla.row.add([
-      producto.nombre,
-      producto.cantidad,
-      producto.precio,
+      producto.nombre || "Sin nombre",
+      producto.cantidad || 0,
+      new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(precioNum),
       `$${total.toFixed(2)} MXN`,
       `<div class="text-center">
-     <button class="btn btn-primary btn-sm borrar-btn" data-id="${key}">
-<img src="../assets/borrar.png" alt="icono para borrar articulo" width="20" height="20">
-     </button>
-   </div>`,
+                <button class="btn btn-primary btn-sm borrar-btn" data-id="${key}">
+                    <img src="../assets/borrar.png" alt="borrar" width="20" height="20">
+                </button>
+            </div>`,
     ]);
   });
 
+  // 4. Dibujar la tabla actualizada
   tabla.draw();
 
+  // 5. Reasignar eventos a los nuevos botones creados
+  asignarEventosBorrar();
 
+  // 6. Actualizar UI de Totales
+  if (InpTotal) {
+    InpTotal.value = `$${totalGeneral.toFixed(2)} MXN`;
+  }
+  localStorage.setItem("TotalGeneral", totalGeneral);
+}
+
+// Separamos la asignación de eventos para mayor claridad
+function asignarEventosBorrar() {
   document.querySelectorAll(".borrar-btn").forEach((btn) => {
     btn.addEventListener("click", function () {
       let id = this.getAttribute("data-id");
@@ -46,29 +68,29 @@ function cargarProductos() {
       sePuedePagar();
     });
   });
-  InpTotal.value = `$${totalGeneral.toFixed(2)} MXN`;
-
-  localStorage.setItem("TotalGeneral", totalGeneral);
 }
 
 function sePuedePagar() {
-  const productos = JSON.parse(localStorage.getItem('products')); 
-  btnContinuar.disabled = productos == null || Object.keys(productos).length === 0 ? true:false;
+  const productos = JSON.parse(localStorage.getItem('products')) || {};
+  if (btnContinuar) {
+    btnContinuar.disabled = Object.keys(productos).length === 0;
+  }
 }
 
 window.addEventListener("load", function () {
+  // Inicializar DataTable
   tabla = $("#tablaCarrito").DataTable({
     language: {
-            emptyTable: "No hay productos elegidos",
-            info: "No hay cambios ni devoluciones.",
-            infoEmpty: "Mostrando 0 de 0 productos elegidos"
-
-        },
+      emptyTable: "No hay productos elegidos",
+      info: "No hay cambios ni devoluciones.",
+      infoEmpty: "Mostrando 0 de 0 productos elegidos"
+    },
     paging: false,
     searching: false,
   });
 
-  cargarProductos(tabla);
+  // Llamar a las funciones iniciales
+  cargarProductos();
   sePuedePagar();
 });
 

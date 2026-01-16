@@ -18,7 +18,8 @@
     <main>
         <div id="PagoHere"></div>
         <div class="container-pago">
-            <img id="logo-ticket" src="../assets/LogoFooter.png"><h1 id="titulo">TICKET DE PAGO</h1>
+            <img id="logo-ticket" src="../assets/LogoFooter.png">
+            <h1 id="titulo">TICKET DE PAGO</h1>
             <p>Su total a pagar es:
             <div id="total"> MXN</div>
             </p>
@@ -52,6 +53,10 @@
 
 
                 <button type="submit" id="pagar">Pagar</button>
+                <div class="d-flex justify-content-between mt-3">
+                    <button type="button" id="btnAtras" class="btn btn-outline-secondary w-45">Atrás</button>
+                    <button type="button" id="btnCancelar" class="btn btn-outline-danger w-45">Cancelar Compra</button>
+                </div>
             </form>
             <div id="alert-messages" class="mt-4"></div>
 

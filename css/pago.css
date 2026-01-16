@@ -173,6 +173,20 @@ label {
     color: var(--primaryColor);
 }
 
+.w-45 {
+    width: 48%; /* Casi la mitad para dejar un pequeño espacio en medio */
+}
+
+#btnCancelar:hover {
+    background-color: #dc3545;
+    color: white;
+}
+
+#btnAtras:hover {
+    background-color: #6c757d;
+    color: white;
+}
+
 @media (max-width: 30rem) {
     .container-pago {
         padding: 2rem 1.2rem;
