@@ -5,9 +5,9 @@ let phone = document.getElementById("telefono");
 let msg = document.getElementById("mensaje");
 let send = document.getElementById("enviar");
 let respuesta = document.getElementById("respuesta");
-
-
-
+ 
+ 
+ 
 let regs = {
   name: /^(?!.*[<>;\'\"\\\/])[A-Za-záéíóúñ]{3,}(?:[\s][A-Za-záéíóúñ]{2,}){0,98}$/,
   email:
@@ -15,7 +15,7 @@ let regs = {
   phone: /^(?!0\d{2}|1\d{2}|2[0-1]\d|220)(?!(\d)\1{9}$)(?!0123456789$)(?!1234567890$)(?!9876543210$)(?!0101010101$)(?!(\d\d)\2{4}$)\d{10}$/,
   msg: /^(?!.*[<>\'\/])[A-Za-z0-9áéíóúÁÉÍÓÚñÑüÜ\s.,;#!?¿¡]{3,300}$/,
 };
-
+ 
 function validate(reg, item) {
   const regex = new RegExp(reg);
   return regex.test(item);
@@ -41,7 +41,7 @@ function validateAll() {
   }
   return resultados;
 }
-
+ 
 function aplicarBordeRojoGlow(campo) {
   switch (campo) {
     case "nombre":
@@ -66,7 +66,7 @@ function aplicarBordeRojoGlow(campo) {
       break;
   }
 }
-
+ 
 function mostrarErrores(arr) {
   const camposInvalidos = arr.slice(1);
   camposInvalidos.forEach((campo) => {
@@ -93,11 +93,11 @@ const camposConReglas = [
   { input: phone, reg: regs.phone },
   { input: msg, reg: regs.msg },
 ];
-
+ 
 function marcarBorde(input, reg) {
   const valor = input.value.trim();
   input.style.border = "";
-
+ 
   if (valor === "" || !reg.test(valor)) {
     input.classList.add("input-invalid-glow");
     input.classList.remove("input-valid-glow");
@@ -106,7 +106,7 @@ function marcarBorde(input, reg) {
     input.classList.add("input-valid-glow");
   }
 }
-
+ 
 function enviarCorreo() {
   emailjs.init("Ne4BmN0pOIkYrKrtE");
   const templateParams = {
@@ -115,7 +115,7 @@ function enviarCorreo() {
     phoneClient: phone.value,
     message: msg.value
   };
-
+ 
   emailjs.send('service_8i405gn', 'template_lnf5o9s', templateParams)
     .then(function (response) {
       respuesta.insertAdjacentHTML(
@@ -135,21 +135,21 @@ function enviarCorreo() {
       </div>`);
     });
 }
-
+ 
 camposConReglas.forEach(({ input, reg }) => {
   input.addEventListener("input", () => {
     marcarBorde(input, reg);
   });
 });
-
+ 
 send.addEventListener("click", function (event) {
   event.preventDefault();
   const form = document.getElementById("contactForm");
   let resultados = validateAll();
-
+ 
   respuesta.innerHTML = '';
   if (resultados[0]) {
-    //enviarCorreo();
+    enviarCorreo();
     guardar();
     form.reset();
     camposConReglas.forEach(({ input }) => {
@@ -160,22 +160,22 @@ send.addEventListener("click", function (event) {
     mostrarErrores(resultados, respuesta);
   }
 });
-
+ 
 async  function guardar(){
-  console.log("hola");
+ 
 const bodyData = {
   nombre: document.getElementById("nombre").value,
   correo: email.value,
   telefono: phone.value,
   mensaje: msg.value
 };
-
+ 
 const options = {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify(bodyData)
 };
-
+ 
 try {
   const response = await fetch(API_URLS.contactos, options);
   const data = await response.json();
