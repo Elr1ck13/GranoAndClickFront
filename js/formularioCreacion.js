@@ -113,7 +113,7 @@ function validarImagen(url) {
 }
 
 async function crearObjetoProducto(finalPhotoUrl) {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("authToken");
   const cat = productCategory.value;
   const prefijo = cat === "cafe" ? "cafe" : "past";
 
