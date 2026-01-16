@@ -177,17 +177,14 @@ function buildNavBar(page) {
             </li>
             <li class="nav-item dropdown only-user d-none" style="padding-right:1rem">
               <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src"" alt="Avatar usuario" class="user-avatar-nav">
+                <img src="" alt="Avatar usuario" class="user-avatar-nav">
                 <span class="user-name-nav"></span>
               </a>
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
-                <li><a class="dropdown-item" href="#">Perfil</a></li>
-                <li><a class="dropdown-item" href="#">Mis pedidos</a></li>
-                <li><hr class="dropdown-dividier"></li>
                 <li><a class="dropdown-item logout-btn" href="#">Cerrar sesión</a></li>
               </ul>
             </li>
-            <li class="nav-item" id="carrito">
+            <li class="nav-item only-user" id="carrito">
               <a class="btn" href="${carritoPage}" role="button">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                   class="bi bi-cart2" viewBox="0 1.8 16 16">
@@ -205,13 +202,9 @@ function buildNavBar(page) {
 
   putHTML("encabezado", navBar, "Error: no encontré el header con id `encabezado`");
 
-  applyNavFromLocalStorage(page);
+  applyNavFromBackEnd(page);
 }
-function applyNavFromLocalStorage(page){
-  const token = localStorage.getItem("userToken");
-  const role = localStorage.getItem("userRole");
-  const userName = localStorage.getItem("userName");
-
+async function applyNavFromBackEnd(page){
   const guest = document.querySelectorAll(".only-guest");
   const user = document.querySelectorAll(".only-user");
   const admin = document.querySelectorAll(".only-admin");
@@ -222,28 +215,37 @@ function applyNavFromLocalStorage(page){
   const show = (els) => els.forEach(el => el.classList.remove("d-none"));
   const hide = (els) => els.forEach(el => el.classList.add("d-none"));
 
-  if(!token){
-    show(guest);
-    hide(user);
-    hide(admin);
-    return
+  show(guest); hide(user); hide(admin);
+
+  const token = localStorage.getItem("authToken");
+  if(!token) {
+    return;
   }
+
+  let sesion = null;
+
+  try {
+    sesion = await apiGetSesion();
+    console.log("sesion backend:", sesion);
+  } catch (e) {
+    console.error("apiGetSesion tronó:", e);
+    return;
+  }
+
+  if(!sesion) return;
 
   hide(guest);
   show(user);
 
-  if(role === "admin"){
-    show(admin);
-  }else{
-    hide(admin);
-  }//if
+  const roleRaw = (sesion.rol || sesion.role || sesion.tipoNombre || "").toString().toLowerCase();
+  const isAdmin = roleRaw.includes("admin") || sesion.subindice === "Ad";
 
-  if(nameSpan){
-    nameSpan.textContent = `Hola, ${userName || "Usuario"}`;
-  }
-  if(avatarImg){
-    avatarImg.src = getIconPath(page, role === "admin" ? "IconoLogo.png" : "IconoLogoAzul.png");
-  }
+  if(isAdmin) show(admin); else hide(admin);
+
+  const nombre = sesion.nombre || sesion.name || sesion.usuario?.nombre || localStorage.getItem("userEmail") || "Usuario";
+  if(nameSpan) nameSpan.textContent = `Hola, ${nombre}`;
+
+  if(avatarImg) avatarImg.src = getIconPath(page, isAdmin ? "IconoLogo.png" : "IconoLogoAzul.png");
 }
 
 document.addEventListener("click", (e) =>{
@@ -252,25 +254,22 @@ document.addEventListener("click", (e) =>{
     return;
   }
   e.preventDefault();
-  localStorage.removeItem("userToken");
-  localStorage.removeItem("userId");
+  localStorage.removeItem("authToken");
+  localStorage.removeItem("token");
+  localStorage.removeItem("userEmail");
   localStorage.removeItem("userRole");
   localStorage.removeItem("userName");
+
+  const dropdownE1 = document.getElementById("accountDropdown");
+  if(dropdownE1){
+    dropdownE1.click();
+  }
 
   const page = document.querySelector("div");
   const indexPage = getPagePaths(page, "index.html");
 
   window.location.href = indexPage;
 });
-
-/*function logOut() {
-  localStorage.removeItem('userToken');
-  localStorage.removeItem('userId');
-
-  let page = document.querySelector("div");
-  buildNavBar(page);
-  window.location.href = 'index.html';
-}*/
 
 window.addEventListener("load", function () {
   let page = document.querySelector("div");
