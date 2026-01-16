@@ -3,7 +3,6 @@ const localCorreo = document.getElementById("emails");
 const localPass = document.getElementById("pass");
 const btnSend = document.getElementById("send");
 const alertMessagesContainer = document.getElementById("alert-messages");
-let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
 
 const regs = {
   email:
@@ -36,7 +35,9 @@ function displayAlert(title, message, isSuccess = false) {
   cleanAlerts();
   const alertClass = isSuccess ? "alert-success-glow" : "alert-error-glow";
   const html = `
-    <div class="alert ${isSuccess ? 'alert-success' : 'alert-danger'} ${alertClass}">
+    <div class="alert ${
+      isSuccess ? "alert-success" : "alert-danger"
+    } ${alertClass}">
       <p class="custom-alert-title">${title}</p>
       <p><strong>${message}</strong></p>
     </div>`;
@@ -73,77 +74,65 @@ function validaPrevio() {
   return veredict;
 }
 
-function compararPassword() {
-  const email = localCorreo.value.trim();
-  const password = localPass.value;
+async function loginBackend() {
+  const correo = localCorreo.value.trim();
+  const password = localPass.value.trim();
 
-  if (usuarios.length === 0) {
-    displayAlert("Error de Datos", "No hay usuarios registrados. Intenta registrar uno.");
-    return false;
-  }
-
-  const usuarioEncontrado = usuarios.find(usuario =>
-    usuario.correo === email && usuario.password === password
-  );
-
-  if (usuarioEncontrado) {
-    /*let rolAsignado = 'client';
-    if (usuarioEncontrado.id && usuarioEncontrado.id.startsWith('AD')) {
-      rolAsignado = 'admin';
-    }*/
-
-    localStorage.setItem('userToken', usuarioEncontrado.correo);
-    localStorage.setItem('userId', usuarioEncontrado.id);
-    localStorage.setItem('userRole', usuarioEncontrado.rol);
-    localStorage.setItem('userName', usuarioEncontrado.nombre);
-
-    displayAlert("Acceso Concedido", `Bienvenido ${usuarioEncontrado.nombre}.`, true);
-    return true;
-  } else {
-    localStorage.removeItem('userToken');
-    localStorage.removeItem('userRole');
-
-    applyGlowClass(localCorreo, false);
-    applyGlowClass(localPass, false);
-
-    displayAlert("Error de Acceso", "Credenciales incorrectas. Verifica tu correo y contraseña.");
-    return false;
-  }
-}
-
-function loadAdmins(){
-  fetch("../data/usuarios.json")
-    .then((res) => res.json())
-    .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
-            const nuevosUsuarios = data.filter(admin => !usuarios.some(u => u.id === admin.id));
-            usuarios.push(...nuevosUsuarios);
-            localStorage.setItem("usuarios", JSON.stringify(usuarios));
-            usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
-        }
-    })
-    .catch((error) => {
-      console.log("Error al cargar administradores iniciales:", error.message);
+  try {
+    const res = await fetch("http://localhost:8080/api/login/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ correo: correo, contrasena: password }),
     });
+
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error(errText || `HTTP ${res.status}`);
+    }
+
+    const data = await res.json();
+
+    const token = data.accessToken;
+
+    if (!token) throw new Error("No llegó token en la respuesta");
+
+    localStorage.setItem("authToken", token);
+    localStorage.setItem("userEmail", correo);
+
+    displayAlert("Acceso Concedido", "Sesión iniciada correctamente.", true);
+    return true;
+  } catch (err) {
+    localStorage.removeItem("authToken");
+    displayAlert(
+      "Error de Acceso",
+      err.message || "No se pudo iniciar sesión."
+    );
+    return false;
+  }
 }
 
 function usuarioAceptado() {
-    window.location.href = "../html/productos.html";
+  window.location.href = "../html/productos.html";
 }
 
-btnSend.addEventListener("click", function (event) {
+btnSend.addEventListener("click", async function (event) {
   event.preventDefault();
   cleanAlerts();
 
-  if (validaPrevio()) {
-    if(compararPassword()){
-      setTimeout(() => {
-        usuarioAceptado();
-        form.reset();
-      }, 500);
-    }
-  } else {
-    displayAlert("Error de Validación", "Por favor, completa correctamente los campos requeridos.");
+  if (!validaPrevio()) {
+    displayAlert(
+      "Error de Validación",
+      "Por favor, completa correctamente los campos requeridos."
+    );
+    return;
+  }
+
+  const ok = await loginBackend();
+  if (ok) {
+    setTimeout(() => {
+      usuarioAceptado();
+      form.reset();
+    }, 300);
   }
 });
 
@@ -155,8 +144,4 @@ localCorreo.addEventListener("input", () => {
 localPass.addEventListener("input", () => {
   const isValid = localPass.value.trim().length > 0;
   applyGlowClass(localPass, isValid);
-});
-
-window.addEventListener("load",function (event) {
-  if (usuarios.length === 0) loadAdmins();
 });
