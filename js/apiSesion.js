@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8080";
+const API_URL = "http://3.144.149.118";
 
 async function apiGetSesion() {
     const token = localStorage.getItem("authToken");
