@@ -1,0 +1,16 @@
+{
+  "name": "grano-and-click",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
+    "lint": "prettier --write ."
+  },
+  "devDependencies": {
+    "vitest": "latest",
+    "playwright": "latest",
+    "@playwright/test": "latest",
+    "prettier": "latest"
+  }
+}

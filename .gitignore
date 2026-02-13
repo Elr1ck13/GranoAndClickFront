@@ -1,0 +1,25 @@
+# IDEs
+.vscode/
+.DS_Store
+thumbs.db
+*.log
+
+# Node
+node_modules/
+package-lock.json
+.npm/
+
+# Docker and db
+.devcontainer/data/
+mysql/
+*.sql.gz
+
+# Testing 
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.local-browsers/
+
+# Environment 
+.env
+.env.local

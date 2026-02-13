@@ -1,0 +1,46 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development 
+    container_name: grano_click_web
+    tty: true 
+    stdin_open: true
+    volumes:
+      - ..:/workspaces/GranoAndClickFront:z
+      - /workspaces/GranoAndClickFront/node_modules
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - grano_net
+
+  db:
+    image: mariadb:11.2
+    container_name: grano_click_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: grano_click_db
+      MYSQL_USER: admin_grano
+      MYSQL_PASSWORD: secure_password
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-u", "root", "-proot_password"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+    volumes:
+      - grano_db_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:z
+    networks:
+      - grano_net
+
+networks:
+  grano_net:
+    driver: bridge
+
+volumes:
+  grano_db_data:

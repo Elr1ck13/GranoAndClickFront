@@ -1,0 +1,8 @@
+# .dockerignore
+.git
+.vscode
+.devcontainer
+node_modules
+npm-debug.log
+README.md
+.DS_Store
