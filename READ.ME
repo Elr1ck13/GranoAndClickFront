@@ -1,0 +1,46 @@
+---
+
+# GranoAndClick Evolution
+
+This repository is a personal evolution of the original E-commerce project created by Tam 1 CH61. My goal with this fork was to take a functional codebase and apply professional architecture and DevOps standards to learn how real-world applications are scaled and maintained.
+
+## Refactoring Goals
+
+As a developing engineer, I wanted to move beyond basic procedural JavaScript. My main focus was applying SOLID principles and improving the developer experience through containerization.
+
+### Architecture and SOLID Principles
+
+While I am still deepening my understanding of these patterns, I restructured the Vanilla JS logic using the following criteria:
+
+* Single Responsibility (SRP): I worked on separating the functions that handle price calculations from those that manipulate the DOM. The cart logic is now more independent and easier to track.
+* Dependency Injection: I started using abstractions so that UI components don't rely directly on global functions, which allowed me to implement unit testing with Vitest.
+* Maintainability: My objective was to transform the JS into a modular system that is more readable and easier for other developers to follow.
+
+### Infrastructure with Docker (GranoAndClick Architecture)
+
+To eliminate "it works on my machine" issues, I configured a development environment based on Docker using a Multistage approach:
+
+* Development Stage (Debian Bookworm): I used a Node 22 image to access modern testing tools like Vitest and Playwright. I configured the user with UID 1000 to ensure seamless Git operations from my Fedora host without permission conflicts.
+* Production Stage (Nginx Alpine): I created an optimized final stage with Nginx to demonstrate how the project would be efficiently served in a real production environment.
+* Host-Container Sync: The code resides on the host and is mounted into the container. I configured Nginx with "sendfile off" so that any changes I make to CSS or HTML are reflected instantly without being blocked by server caching.
+
+## Getting Started
+
+This environment is specifically designed for VS Code Dev Containers.
+
+1. Preparation:
+Ensure the setup script has execution permissions on your local system:
+chmod +x .devcontainer/setup.sh
+2. Launching the Environment:
+When you open this folder in VS Code, the editor will detect the configuration and prompt you to "Reopen in Container." This will automatically install Playwright dependencies and spin up a MariaDB 11.2 database.
+3. Testing:
+I have included initial tests to ensure my refactoring doesn't break original functionality:
+
+* Unit Tests: npm run test:unit
+* E2E Tests: npm run test:e2e
+
+## Learning Notes
+
+This project is an ongoing work in progress. I recognize there is still much to learn regarding state management and Docker image optimization, but this refactor represents my current progress in applying software architecture and automation best practices.
+
+---
