@@ -13,17 +13,17 @@ export const Navbar = {
     init: (containerId, pageId) => {
         const container = document.getElementById(containerId);
         if (!container) return console.error(`No se encontró el la etiqueta: ${containerId}`);
-
-        const brandLogoFile = assetMap["logo-brand"]; 
-        const iconPath = Router.getAsset(pageId, brandLogoFile);
+ 
+        const iconPath = Router.getAsset(pageId, assetMap["logo-brand"]);
         const indexPage = Router.getLink(pageId, "index.html");
-        const usPage = Router.getLink(pageId, "sobreNosotros.html");
-        const contactoPage = Router.getLink(pageId, "contacto.html");
-        const productPage = Router.getLink(pageId, "productos.html");
-        const logPage = Router.getLink(pageId, "login.html");
-        const signPage = Router.getLink(pageId, "signin.html");
-        const formularioCreacion = Router.getLink(pageId, "formularioCreacion.html");
-        const carritoPage = Router.getLink(pageId, "carrito.html");
+        const aboutPage = Router.getLink(pageId, "about.html");
+        console.log(pageId)
+        const contactPage = Router.getLink(pageId, "contact.html");
+        const productPage = Router.getLink(pageId, "products.html");
+        const loginPage = Router.getLink(pageId, "login.html");
+        const signinPage = Router.getLink(pageId, "signin.html");
+        const newProductPage = Router.getLink(pageId, "newProduct.html");
+        const carPage = Router.getLink(pageId, "car.html");
 
         container.innerHTML = `
             <nav class="navbar navbar-dark navbar-expand-lg mt-2">
@@ -37,17 +37,17 @@ export const Navbar = {
                 </button>
                 <div class="collapse navbar-collapse" id="mainNavbarContent">
                   <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="${indexPage}">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="${productPage}">Productos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="${contactoPage}">Contáctanos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="${usPage}">Sobre nosotros</a></li>
+                    <li class="nav-item"><a class="nav-link" href="${indexPage}">${translations["home"]}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="${productPage}">${translations["products"]}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="${contactPage}">${translations["contact"]}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="${aboutPage}">${translations["aboutMe"]}</a></li>
                     <li class="nav-item only-admin d-none">
-                      <a class="nav-link nav-admin-cta" href="${formularioCreacion}">Agregar producto</a>
+                      <a class="nav-link nav-admin-cta" href="${newProductPage}">${translations["newProduct"]}</a>
                     </li>
                   </ul>
                   <ul class="navbar-nav d-flex align-items-center">
-                    <li class="nav-item only-guest"><a class="nav-link" href="${logPage}">Iniciar sesión</a></li>
-                    <li class="nav-item me-3 only-guest"><a class="nav-link" href="${signPage}">Registrarse</a></li>
+                    <li class="nav-item only-guest"><a class="nav-link" href="${loginPage}">${translations["login"]}</a></li>
+                    <li class="nav-item me-3 only-guest"><a class="nav-link" href="${signinPage}">${translations["signin"]}</a></li>
                     
                     <li class="nav-item dropdown only-user d-none" style="padding-right:1rem">
                       <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" id="accountDropdown" data-bs-toggle="dropdown">
@@ -55,12 +55,12 @@ export const Navbar = {
                         <span class="user-name-nav"></span>
                       </a>
                       <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item logout-btn" href="#">Cerrar sesión</a></li>
+                        <li><a class="dropdown-item logout-btn" href="#">${translations["logout"]}</a></li>
                       </ul>
                     </li>
                     <li class="nav-item only-user d-none" id="carrito">
-                      <a class="btn" href="${carritoPage}" role="button">
-                        <i class="bi bi-cart2"></i> Carrito
+                      <a class="btn" href="${carPage}" role="button">
+                        <i class="bi bi-cart2"></i> ${translations["car"]}
                       </a>
                     </li>
                   </ul>

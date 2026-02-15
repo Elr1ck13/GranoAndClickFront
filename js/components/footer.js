@@ -18,7 +18,7 @@ export const Footer = {
           <div class="row align-items-center flex-column flex-md-row text-center text-md-start">
             <div class="col-md-6 mb-3 mb-md-0 d-flex flex-column align-items-center align-items-md-start">
               <a href="${indexPage}" class="footer-brand" aria-label="Grano & Click">
-                <img src="${iconPath}" alt="LogoFooter" height="35">
+                <img src="${iconPath}" alt="Logo Footer" height="35">
               </a>
               <div class="footer-copyright">© <span id="footer-year">${new Date().getFullYear()}</span> Todos los derechos reservados.</div>
             </div>

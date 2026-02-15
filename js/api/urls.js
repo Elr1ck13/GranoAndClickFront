@@ -1,11 +1,12 @@
 export const assetMap = {
-    "main-hero-left": "background/heroCoffe.png",
-    "main-hero-right": "background/heroCake.png",
-    "main-prod-1": "background/CafePremium.png",
-    "main-prod-2": "background/Capuchino.png",
-    "main-prod-3": "background/Reposteria.png",
-    "main-large-prod-1": "background/VariosPasteles.png",
-    "main-large-prod-2": "background/Panes.png",
+    "main-hero-left": "background/heroRight.png",
+    "main-hero-right": "background/heroLeft.png",
+    "main-hero-center": "background/heroCenter.png",
+    "main-prod-1": "background/mainProd1.png",
+    "main-prod-2": "background/mainProd2.png",
+    "main-prod-3": "background/mainProd3.png",
+    "main-large-prod-1": "background/largeProd1.png",
+    "main-large-prod-2": "background/largeProd2.png",
 
     "logo-brand": "brand/brandLogo.png",
     "navbar-logo-admin": "brand/adminLogo.png",
@@ -19,7 +20,7 @@ export const getPaths = (pageId) => {
 
     return {
         index: isIndex ? "./index.html" : "../index.html",
-        pages: (fileName) => isIndex ? `./html/${fileName}` : `./${fileName}`,
+        pages: (fileName) => isIndex ? `./pages/${fileName}` : `./${fileName}`,
         imagesBase: isIndex ? "./assets/images" : "../assets/images",
         brand: (file) => {
             const base = isIndex ? "./assets/images/brand" : "../assets/images/brand";

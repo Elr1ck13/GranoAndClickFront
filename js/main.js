@@ -1,18 +1,15 @@
 import { Navbar } from './components/navbar.js';
 import { Footer } from './components/footer.js';
 import { Router } from './modules/router.js';
-import { translations } from './api/i18n.js'; 
-import { assetMap } from './api/urls.js'; 
+import { translations } from './api/i18n.js';
+import { assetMap } from './api/urls.js';
 
 document.addEventListener("DOMContentLoaded", async () => {
     const pageElement = document.querySelector("div[id]") || document.body;
-    
-    const currentLang = 'es'; 
 
     resolveDynamicImages(pageElement);
 
-    applyTranslations(currentLang);
-
+    applyTranslations();
     Navbar.init("navbar-container", pageElement);
     Footer.init("footer-container", pageElement);
 
@@ -21,11 +18,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 
-function applyTranslations(lang) {
+function applyTranslations() {
     const elements = document.querySelectorAll("[data-i18n]");
     elements.forEach(el => {
         const key = el.dataset.i18n;
-        const text = translations[lang][key];
+        const text = translations[key]; 
         if (text) {
             el.innerHTML = text; 
         }
@@ -35,9 +32,9 @@ function applyTranslations(lang) {
 function resolveDynamicImages(pageElement) {
     const dynamicImages = document.querySelectorAll("img[data-img]");
     dynamicImages.forEach(img => {
-        const assetKey = img.dataset.img; 
-        const fileName = assetMap[assetKey]; 
-        
+        const assetKey = img.dataset.img;
+        const fileName = assetMap[assetKey];
+
         if (fileName) {
             img.src = Router.getAsset(pageElement, fileName);
         } else {
@@ -54,8 +51,7 @@ function setupNavigation(pageElement) {
         e.preventDefault();
         const page = target.dataset.route;
         const hash = target.dataset.hash ? `#${target.dataset.hash}` : "";
-        
-        const url = Router.getLink(pageElement, page);
+        const url =     Router.getLink(pageElement, page);
         window.location.href = url + hash;
     });
 }
