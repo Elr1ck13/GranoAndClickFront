@@ -217,12 +217,15 @@ main {
   padding: 1rem 0;
 }
 
-.footer-links a {
+.footer-links-nav a button {
   display: flex;
   flex-direction: column;
-  color: var(--primaryColor);
   align-items: center;
+}
+.footer-links{
+  color: var(--primaryColor);
   text-decoration: none;
+
 }
 
 .footer-copyright {

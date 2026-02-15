@@ -41,8 +41,15 @@ export const allTranslations = {
         //footer
         "copyright": "Todos los derechos reservados",
         "privacy-notice": "Aviso de privacidad",
-        "contact-link": "Contactanos"
+        "contact-link": "Contactanos",
 
+        // Privacy Notice Drawer/Modal
+        "privacy-title": "Aviso de Privacidad",
+        "privacy-intro": "En <strong>Grano & Click</strong>, protegemos tus datos personales.",
+        "privacy-body": "Utilizamos la información recolectada únicamente para mejorar tu experiencia de compra y gestionar tus pedidos de manera segura.",
+        "privacy-close-btn": "Entendido",
+        "privacy-full-doc": "Ver documento completo <strong>aquí</strong>, Solo disponible en español",
+        "privacy-link":"aquí",
     },
     en: {
         // index
@@ -87,6 +94,14 @@ export const allTranslations = {
         "copyright": "All rights reserved",
         "privacy-notice": "Privacy notice",
         "contact-link": "Contact us",
+
+        // Privacy Notice Drawer/Modal
+        "privacy-title": "Privacy Notice",
+        "privacy-intro": "At Grano & Click, we protect your personal data.",
+        "privacy-body": "We use the collected information solely to improve your shopping experience and manage your orders securely.",
+        "privacy-close-btn": "Understood",
+        "privacy-full-doc": "See full document, Only available in Spanish",
+        "privacy-link":"here",
 
     }
 };
