@@ -60,7 +60,7 @@ if [ ! -f index.html ]; then
     ln -s src/index.html index.html 2>/dev/null || cp src/index.html index.html
 fi
 
-sudo chmod -R 755 $PROJECT_DIR
+sudo chown -R vscode:vscode src tests 2>/dev/null || true
 sudo chown -R vscode:vscode node_modules 2>/dev/null || true
 
 echo "Instalando dependencias de Node"
